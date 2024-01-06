@@ -1,0 +1,2 @@
+export const PASSWORD_REGEXP = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/
+export const USERNAME_REGEXP = /^[\w-_.]{5,16}$/;

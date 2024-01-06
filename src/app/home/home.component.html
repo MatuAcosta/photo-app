@@ -1,0 +1,13 @@
+<div class="container">
+    @for (pic of pictures; track pic.username){
+        <album 
+            [username]="pic.username"
+            [imageSrc]="pic.url"
+            [description]="pic.description"
+            [createdAt]="pic.createdAt"
+            [likes]="pic.likes"
+            [topic]="pic.topic"
+        >
+        </album>
+    }   
+</div>

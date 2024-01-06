@@ -1,0 +1,23 @@
+<section class="signup">
+    <h2>Sign in to upload your photo</h2>
+    <form [formGroup]="signForm" (ngSubmit)="signUp($event)">
+        <div class="input">
+            <label for="email">Email </label>
+            <input id="email" type="text" formControlName="email">
+
+        </div>
+        <div class="input">
+            <label for="username">Username </label>
+            <input id="username" type="text" formControlName="username">
+      
+        </div>
+        <div class="input">
+            <label for="password">Password </label>
+            <input id="password" type="password" formControlName="password">
+        </div>
+        <button type="submit">
+            Registrarse
+        </button>
+    </form>
+</section>
+

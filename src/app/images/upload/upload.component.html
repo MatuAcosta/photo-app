@@ -1,0 +1,26 @@
+<div class="image-container">
+    @if(!imageUploaded) {
+        <section class="upload-photo"
+            draggable="true"
+            (drop)="onDrop($event)"
+            (dragover)="onDragOver($event)"
+        >
+            <label for="photo">Choose a picture</label>
+            <input type="file" id="photo" name="photo" accept="image/*" (change)="onFileSelected($event)">
+        </section>
+    } 
+    @else {
+        <section class="image-preview">
+            <img [src]="imageSrc" alt="image preview">
+            <button (click)="removeImage()">
+                REMOVE IMAGE
+            </button>
+            <button (click)="uploadImageToStorage()">
+                Upload IMAGE
+            </button>
+        </section>
+    }    
+</div>
+
+
+

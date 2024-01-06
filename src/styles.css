@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+
+*{
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Ubuntu,sans-serif;
+}
+
+body {
+    background-color: rgb(2,4,32);
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

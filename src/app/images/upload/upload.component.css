@@ -1,0 +1,12 @@
+.image-container {
+    .upload-photo {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        height: 500px;
+    }
+    .image-preview{
+        width: 200px;
+        height: 200px;
+    }
+}
