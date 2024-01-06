@@ -1,19 +1,24 @@
-<section class="signup">
-    <h2>Sign in to upload your photo</h2>
-    <form [formGroup]="signForm" (ngSubmit)="signUp($event)">
-        <div class="input">
-            <label for="email">Email </label>
-            <input id="email" type="text" formControlName="email">
+<section class="
+flex flex-col w-fit h-full items-center justify-center px-6 py-6 b
+bg-gradient-to-r from-emerald-600 from-0% to-emerald-900 to-90%
+border-2 border-emerald-400
+rounded-lg">
+    <h2 class="my-4 text-white text-xl">Sign in to upload your photo</h2>
+    <form class="flex flex-col my-2" 
+        [formGroup]="signForm" (ngSubmit)="signUp($event)">
+        <div class="text-md mx-2 my-2">
+            <label class="text-white" for="email">Email </label>
+            <input class="mt-1" id="email" type="text" formControlName="email">
 
         </div>
-        <div class="input">
-            <label for="username">Username </label>
-            <input id="username" type="text" formControlName="username">
+        <div class="text-md mx-2 my-2" >
+            <label class="text-white" for="username">Username </label>
+            <input class="mt-1" id="username" type="text" formControlName="username">
       
         </div>
-        <div class="input">
-            <label for="password">Password </label>
-            <input id="password" type="password" formControlName="password">
+        <div class="text-md mx-2 my-2">
+            <label class=" text-white" for="password">Password </label>
+            <input class="mt-1" id="password" type="password" formControlName="password">
         </div>
         <button type="submit">
             Registrarse
