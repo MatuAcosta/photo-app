@@ -78,6 +78,12 @@ export class AuthService {
     this.userService.setUserDTO(email);
   }
 
+  async logout(){
+    this.userAuth.next(null);
+    this.userService.cleanUserDTO();
+  }
+
+
   async getToken(user: User) {
     return await user.getIdToken();
 }

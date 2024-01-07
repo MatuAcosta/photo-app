@@ -14,12 +14,17 @@ export class UserService {
   constructor() { }
   
 
+  cleanUserDTO(){
+    this.userDTO.next(null);  
+  }
+
   setUserDTO(email: string){
     this.findUserByEmail(email).then((res: any) => {
       if(res.error) return;
       if(res.user) this.userDTO.next(res.user);
     })
   }
+
   async findUserByEmail(email: string){
     const docRef = doc(this.firestore, this.users_path, email);    
     const q = query(collection(this.firestore, this.users_path), where('email', '==', email ));

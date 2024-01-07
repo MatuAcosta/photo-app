@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
-import { SignupComponent } from './auth/signup/signup.component';
-import { SigninComponent } from './auth/signin/signin.component';
+import { AuthComponent } from './auth/auth.component';
 import { UploadComponent } from './images/upload/upload.component';
 import { authGuard } from './guards/auth.guard';
 import { HomeComponent } from './home/home.component';
@@ -12,13 +11,13 @@ export const routes: Routes = [
     },
     {
         path:'sign-up',
-        title:'Sign Up',
-        component: SignupComponent
+        title:'auth',
+        component: AuthComponent
     },
     {
-        path: 'sign-in',
-        title: 'Sign in',
-        component: SigninComponent
+        path:'sign-in',
+        title:'auth',
+        component: AuthComponent
     },
     {
         path: '',

@@ -1,13 +1,20 @@
+
 <div class="container">
-    @for (pic of pictures; track pic.username){
-        <album 
-            [username]="pic.username"
-            [imageSrc]="pic.url"
-            [description]="pic.description"
-            [createdAt]="pic.createdAt"
-            [likes]="pic.likes"
-            [topic]="pic.topic"
-        >
-        </album>
-    }   
+    <section class="">
+
+    </section>
+    <section class="container grid grid-cols-2 lg:grid-cols-4 gap-24">
+        @for (pic of pictures; track pic.username){
+            <album 
+                [username]="pic.username"
+                [imageSrc]="pic.url"
+                [description]="pic.description"
+                [createdAt]="pic.createdAt"
+                [likes]="pic.likes"
+                [topic]="pic.topic"
+            >
+            </album>
+        }   
+    </section>
+
 </div>

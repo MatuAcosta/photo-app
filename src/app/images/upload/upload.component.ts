@@ -51,16 +51,18 @@ export class UploadComponent implements OnInit, OnDestroy{
     try {
       let user = await firstValueFrom(this.userService.userDTO$);
       let path = `images/${user?.username}/${this.imageUploaded?.name}`;
-      this.uploadSub = this.pictureService.uploadProgress$
+      let subProgress = this.pictureService.uploadProgress$
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (progress: number) => { 
         this.progress = progress;     
       });
-      this.uploadSub = this.pictureService.urlPicture$
+      let subUpload = this.pictureService.urlPicture$
       .pipe(takeUntil(this.destroy$))
       .subscribe((url: string) => {
         if(url !== ''){
           this.uploadImageToStore(url, String(user?.username), '');
+          subUpload.unsubscribe();
+          subProgress.unsubscribe();
         }
       })
       this.pictureService.uploadPictureToStorage(this.imageUploaded, path);
