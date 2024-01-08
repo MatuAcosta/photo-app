@@ -8,6 +8,8 @@
     -apple-system,BlinkMacSystemFont,Segoe UI,monospace, Roboto,Helvetica Neue,Ubuntu,sans-serif;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
+
 
 html, body { height: 100vh; }
 body { margin: 0;}
