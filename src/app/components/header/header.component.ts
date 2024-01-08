@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { user } from '@angular/fire/auth';
+import { Store } from '@ngrx/store';
+import { logout } from '../../ngrx/auth/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -11,9 +13,18 @@ import { user } from '@angular/fire/auth';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  private authService: AuthService = inject(AuthService);
-  public isLogged: boolean = false;
+  @Input() logged: any;
+  private store: Store<any> = inject(Store<any>);
+
+
   constructor() { 
+    
   }
-  
+  ngOnInit(): void {
+    console.log('logged', this.logged);
+  }
+  logout(){
+    this.store.dispatch(logout());
+  }
+
 }

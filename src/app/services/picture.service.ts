@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
 import { DateService } from './date.service';
 import { TopicService } from './topic.service';
+import { unsubscribe } from 'diagnostics_channel';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,7 @@ export class PictureService {
           url: downloadURL
         }
       });
-    });
+    })
   }
   async createPicture(url: string, username: string, description:string){
     try {

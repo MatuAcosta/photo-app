@@ -8,6 +8,8 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import {getStorage, provideStorage} from '@angular/fire/storage';
 import { provideAnimations } from '@angular/platform-browser/animations'
 import { getFunctions, provideFunctions} from '@angular/fire/functions';
+import { provideStore } from '@ngrx/store';
+import { authReducer } from './ngrx/auth/auth.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideClientHydration(),
@@ -15,7 +17,10 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideAuth(() => getAuth())),
     importProvidersFrom(provideFirestore(() => getFirestore())),
     importProvidersFrom(provideStorage(() => getStorage())),
-    importProvidersFrom(provideFunctions(() => getFunctions())), 
-    provideAnimations(),
-  ],
+    importProvidersFrom(provideFunctions(() => getFunctions())),
+    provideAnimations(), provideStore(
+      {
+        auth: authReducer
+      }
+    )],
 };

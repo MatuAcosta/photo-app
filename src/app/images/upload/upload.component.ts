@@ -61,8 +61,6 @@ export class UploadComponent implements OnInit, OnDestroy{
       .subscribe((url: string) => {
         if(url !== ''){
           this.uploadImageToStore(url, String(user?.username), '');
-          subUpload.unsubscribe();
-          subProgress.unsubscribe();
         }
       })
       this.pictureService.uploadPictureToStorage(this.imageUploaded, path);

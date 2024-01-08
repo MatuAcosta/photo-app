@@ -1,6 +1,8 @@
 
-<app-header></app-header>
+<app-header
+[logged]="authLogged$ | async"
+></app-header>
+
 <main class="container mx-auto flex flex-col items-center h-screen">
-  <a routerLink="upload">UPLOAD</a>
   <router-outlet></router-outlet>  
 </main>

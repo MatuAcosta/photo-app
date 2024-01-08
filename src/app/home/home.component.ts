@@ -1,22 +1,22 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AlbumComponent } from '../images/album/album.component';
 import { PictureService } from '../services/picture.service';
-import { PictureDTO, TopicDTO } from '../models/types';
-import { DateService } from '../services/date.service';
+import { PictureDTO } from '../models/types';
 import { TopicService } from '../services/topic.service';
 import { DocumentData } from '@angular/fire/firestore';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AlbumComponent],
+  imports: [AlbumComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
   private pictureService: PictureService = inject(PictureService);
-  private dateService: DateService = inject(DateService);
   private topicService: TopicService = inject(TopicService);
+
   public pictures: PictureDTO[] = [];
   public topicOfTheDay: DocumentData | undefined | null;
   constructor() { }
@@ -25,6 +25,8 @@ export class HomeComponent implements OnInit {
     console.log(new Date().getTime());
     await this.getTopicOfTheDay();
     this.getPictures();
+    console.log('topic', this.topicOfTheDay);
+    
   }
 
 

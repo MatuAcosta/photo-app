@@ -1,0 +1,12 @@
+.rain {
+	height: 100%;
+	background: url('../assets/camera.jpg');
+	animation: rain .3s linear infinite;
+} 
+
+
+@keyframes rain {
+	0% { background-position: 0% 0%; }
+
+	100% { background-position: 20% 100%; }
+}

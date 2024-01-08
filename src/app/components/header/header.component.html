@@ -1,5 +1,5 @@
 <nav class="flex items-center 
-justify-between flex-wrap bg-gradient-to-r from-emerald-700 from-20% to-emerald-950 to-90% p-4 lg:h-20">
+justify-between flex-wrap bg-gradient-to-r from-emerald-950 from-20% to-slate-950 to-90% p-4 lg:h-20">
   <div class="flex items-center flex-shrink-0 text-emerald mr-6">
     <a routerLink="">
       <h1 class="text-emerald-500 text-5xl">Pic Topic</h1>
@@ -12,7 +12,7 @@ justify-between flex-wrap bg-gradient-to-r from-emerald-700 from-20% to-emerald-
   </div>
   <div class="w-full block flex-grow lg:flex lg:items-center lg:w-80">
     <div class="text-md lg:flex lg:flex-grow justify-end">
-      @if(!isLogged){
+      @if(!logged){
         <button class="
         hover:bg-emerald-900 border-2 hover:border-emerald-400
         bg-emerald-800
@@ -31,9 +31,11 @@ justify-between flex-wrap bg-gradient-to-r from-emerald-700 from-20% to-emerald-
       </button>
       }
       @else {
-        <button class="w-32 hover:bg-emerald-900 border-2 hover:border-emerald-400
+        <button 
+        (click)="logout()"
+        class="w-32 hover:bg-emerald-900 border-2 hover:border-emerald-400
         bg-emerald-800 lg:mr-3  md:mt-3 rounded-xl px-6 py-1 flex items-center justify-center">
-          <a routerLink="sign-in" class="
+          <a routerLink="/home" class="
           block text-center lg:inline-block lg:mt-0 text-white">
           Logout
         </a>

@@ -3,6 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { login, logout } from '../ngrx/auth/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -14,7 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
-  private route = inject(Router)
+  private route = inject(Router);
+  private store = inject(Store<any>);
   public isSignUp:boolean = false;
 
   public h2Text: string | undefined;
@@ -59,7 +62,7 @@ export class AuthComponent implements OnInit {
       if(signIn.error) return console.log('Error signup', signIn.message);
       console.log(signIn.message);
       this.navigateToHome();
-
+      this.login();
     } catch (error) {
       console.log(error);
     }
@@ -75,11 +78,20 @@ export class AuthComponent implements OnInit {
       if(signUp.error) return console.log('Error signup', signUp.message);
       console.log(signUp.message);
       this.navigateToHome();
+      this.login();
     } catch (error) {
       console.log(error);
     }
 
   }
+
+  login(){
+    this.store.dispatch(login());
+  }
+  logout(){
+    this.store.dispatch(logout());
+  }
+
   navigateToHome(){
     this.route.navigate(['/']);
   }
