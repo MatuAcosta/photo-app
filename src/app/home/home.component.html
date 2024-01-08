@@ -1,26 +1,22 @@
 
-<div class="w-full py-4">
+<div class="container mx-auto py-4">
     <section class="flex flex-col items-center 
     text-white ">
         <h2 class="text-5xl my-5 text-transparent font-mono 
-        bg-gradient-to-r from-slate-100 from-20% to-slate-300 to-90%
-        bg-clip-text font-bold
-        ">
+            bg-gradient-to-r from-slate-100 from-20% to-slate-300 to-90%
+            bg-clip-text font-bold">
             Today's topic
         </h2>
-        @if(topicOfTheDay){
-            <span class="mb-10 bg-slate-800
-            px-24 py-2 rounded-2xl font-mono
-               animate-fade
-            ">
-               <h3 class="text-4xl text-slate-200">
-                   {{topicOfTheDay?.['topic']}}
-               </h3>
-           </span>
-        }
+        <span class="mb-10 bg-gradient-to-r from-emerald-950 from-20% to-slate-950 to-90%
+        px-24 py-2 rounded-2xl font-mono
+           animate-fade">
+            <h3 class="text-4xl text-slate-200">
+                {{topicOfTheDay?.['topic']}}
+            </h3>
+        </span>
 
     </section>
-    <section class="grid grid-cols-2 lg:grid-cols-5  gap-y-5 gap-x-5">
+    <section class="grid grid-cols-2 gap-5 xl:grid-cols-5">
         @for (pic of pictures ; track pic.username){
             <album 
                 class="animate-fade"

@@ -1,6 +1,6 @@
-<div class="container w-auto  h-auto mt-10 border-2 border-dashed border-slate-600">
+<div class="container w-auto  h-auto my-24  border-2 border-dashed border-slate-600">
     @if(!imageUploaded) {
-        <section class="p-24 flex flex-col items-center justify-center w-full h-full"
+        <section class="p-28 flex flex-col items-center justify-center w-full h-full"
             draggable="true"
             (drop)="onDrop($event)"
             (dragover)="onDragOver($event)"
@@ -13,17 +13,17 @@
     } 
     @else {
         <section class="w-full h-full p-5 ">
-            <img [src]="imageSrc" class="w-full h-full">
+            <img [src]="imageSrc" class="w-full h-96">
 
         </section>
         <section class="flex justify-center my-2 px-5 py-2">
             <button class="w-48 mr-4 rounded-full px-12 text-slate-300 font-bold bg-slate-950 border-2 border-emerald-600" (click)="removeImage()">
-                Remove image
+                Remove 
             </button>
             <button 
-            class="w-48  rounded-full px-12 text-slate-300 font-bold bg-slate-950 border-2 border-emerald-600"
+            class="w-48  rounded-full py-2 px-12 text-slate-300 font-bold bg-slate-950 border-2 border-emerald-600"
             (click)="uploadImageToStorage()">
-                Upload image
+                Upload 
             </button>
         </section>
 
