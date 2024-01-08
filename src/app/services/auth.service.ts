@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Auth, User, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { UserCredential, createUserWithEmailAndPassword } from '@firebase/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ResponseGeneric, UserAuth, UserDTO } from '../models/types';
+import { ResponseGeneric, UserAuth } from '../models/types';
 import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root',

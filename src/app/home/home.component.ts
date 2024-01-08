@@ -5,6 +5,7 @@ import { PictureDTO } from '../models/types';
 import { TopicService } from '../services/topic.service';
 import { DocumentData } from '@angular/fire/firestore';
 import { RouterLink } from '@angular/router';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,17 +17,22 @@ import { RouterLink } from '@angular/router';
 export class HomeComponent implements OnInit {
   private pictureService: PictureService = inject(PictureService);
   private topicService: TopicService = inject(TopicService);
+  private destroy$ = new Subject<void>();
 
   public pictures: PictureDTO[] = [];
   public topicOfTheDay: DocumentData | undefined | null;
+  public noMorePictures: boolean = false;
   constructor() { }
 
   async ngOnInit() {
-    console.log(new Date().getTime());
+    this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
+      this.pictures = pictures;
+    });
+    this.pictureService.noMorePictures$.pipe(takeUntil(this.destroy$)).subscribe((noMore: boolean) => {      
+      this.noMorePictures = noMore;
+    });
     await this.getTopicOfTheDay();
     this.getPictures();
-    console.log('topic', this.topicOfTheDay);
-    
   }
 
 
@@ -45,12 +51,15 @@ export class HomeComponent implements OnInit {
 
   async getPictures(){
     try {
-      let picturesData = await this.pictureService.getPictures();
-      this.pictures = picturesData.data;
+      await this.pictureService.getPictures();
     } catch (error) {
       console.log('error in getPictures', error);
     }
+  }
 
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

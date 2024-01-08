@@ -1,11 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs, limit, query, setDoc, startAfter } from '@angular/fire/firestore';
 import { FirebaseStorage, Storage, StorageError, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
 import { DateService } from './date.service';
 import { TopicService } from './topic.service';
-import { unsubscribe } from 'diagnostics_channel';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +17,10 @@ export class PictureService {
   private uploadProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private urlPicture: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private dbPictures: string = 'pictures';  
+  private lastVisible: any;
+  private pictures: BehaviorSubject<PictureDTO[]> = new BehaviorSubject<PictureDTO[]>([]);
+  public noMorePictures$ : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);   
+  public pictures$ = this.pictures.asObservable();
   public urlPicture$ = this.urlPicture.asObservable();
   public uploadProgress$ = this.uploadProgress.asObservable();
 
@@ -73,17 +76,22 @@ export class PictureService {
     }
   }
 
-  async getPictures (): Promise<{data: any, error: boolean}>{
+  async getPictures (): Promise<any>{
     try {
-      const pictures = await getDocs(collection(this.firestore, this.dbPictures));
+      const limitQuery = 5;
+      const queryPictures = this.lastVisible === undefined ? 
+        query(collection(this.firestore, this.dbPictures), limit(limitQuery)) : 
+        query(collection(this.firestore, this.dbPictures),startAfter(this.lastVisible), limit(limitQuery));
+      const pictures = await getDocs(queryPictures);
+      if (pictures.docChanges().length < limitQuery) {
+         this.noMorePictures$.next(true);
+      }
       const picturesArray: PictureDTO[] = [];
       pictures.forEach((picture: any) => {
         picturesArray.push(picture.data());
       });
-      return {
-        error: false,
-        data: picturesArray
-      }
+      this.pictures.next([...this.pictures.getValue(), ...picturesArray]);
+      this.lastVisible = pictures.docs[pictures.docs.length - 1];
     } catch (error) {
       return {
         error: true,
