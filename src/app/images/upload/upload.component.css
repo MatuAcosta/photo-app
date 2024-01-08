@@ -1,12 +1,11 @@
-.image-container {
-    .upload-photo {
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        height: 500px;
-    }
-    .image-preview{
-        width: 200px;
-        height: 200px;
-    }
+
+
+
+input[type="file"]::file-selector-button {
+    background: rgb(2, 6, 23);
+    border-radius: 50px;
+    color: white;
+    border: 1px solid rgb(16,185,129);
+    padding: 5px 10px;
+    margin-right: 10px;
 }

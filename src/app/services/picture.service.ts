@@ -63,6 +63,7 @@ export class PictureService {
         likes: 0,
         topic: this.topicService.topicOfTheDay.topic
       });
+      this.setUrl('');
       return {
         error: false,
         message: 'picture created'
@@ -74,6 +75,10 @@ export class PictureService {
         message: ''
       }
     }
+  }
+
+  setUrl(url: string){
+    this.urlPicture.next(url);
   }
 
   async getPictures (): Promise<any>{
