@@ -18,6 +18,7 @@
     <section class="grid grid-cols-2 lg:grid-cols-5  gap-y-5 gap-x-5">
         @for (pic of pictures ; track pic.username){
             <album 
+                class="animate-fade"
                 [username]="pic.username"
                 [imageSrc]="pic.url"
                 [description]="pic.description"
@@ -29,8 +30,8 @@
         }   
     </section>
     @if(!noMorePictures){
-        <section class="flex justify-center my-5">
-            <button class="bg-emerald-700 px-4 py-2 rounded-2xl font-mono
+        <section class="flex justify-center my-10">
+            <button class="bg-emerald-700 px-10 py-2 rounded-2xl font-mono
             text-white font-bold" (click)="getPictures()">
                 Load more
             </button>
