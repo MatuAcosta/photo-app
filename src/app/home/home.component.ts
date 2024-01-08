@@ -21,15 +21,11 @@ export class HomeComponent implements OnInit {
 
   public pictures: PictureDTO[] = [];
   public topicOfTheDay: DocumentData | undefined | null;
-  public noMorePictures: boolean = false;
   constructor() { }
 
   async ngOnInit() {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
       this.pictures = pictures;
-    });
-    this.pictureService.noMorePictures$.pipe(takeUntil(this.destroy$)).subscribe((noMore: boolean) => {      
-      this.noMorePictures = noMore;
     });
     await this.getTopicOfTheDay();
     this.getPictures();

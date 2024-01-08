@@ -23,6 +23,7 @@ export type PictureDTO = {
     createdAt: string;
     topic: string;
     likes: number;
+    time: number;
 }
 
 export type TopicDTO = {

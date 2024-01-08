@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs, limit, query, setDoc, startAfter } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from '@angular/fire/firestore';
 import { FirebaseStorage, Storage, StorageError, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
@@ -17,9 +17,7 @@ export class PictureService {
   private uploadProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private urlPicture: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private dbPictures: string = 'pictures';  
-  private lastVisible: any;
   private pictures: BehaviorSubject<PictureDTO[]> = new BehaviorSubject<PictureDTO[]>([]);
-  public noMorePictures$ : BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);   
   public pictures$ = this.pictures.asObservable();
   public urlPicture$ = this.urlPicture.asObservable();
   public uploadProgress$ = this.uploadProgress.asObservable();
@@ -55,11 +53,12 @@ export class PictureService {
   }
   async createPicture(url: string, username: string, description:string){
     try {
-      const createdPicture = await setDoc(doc(this.firestore, this.dbPictures, username),{
+      await setDoc(doc(this.firestore, this.dbPictures, username),{
         url,
         username,
         description,
         createdAt: this.dateService.todayDate.join('-'),
+        time: this.dateService.today.getTime(),
         likes: 0,
         topic: this.topicService.topicOfTheDay.topic
       });
@@ -83,20 +82,14 @@ export class PictureService {
 
   async getPictures (): Promise<any>{
     try {
-      const limitQuery = 5;
-      const queryPictures = this.lastVisible === undefined ? 
-        query(collection(this.firestore, this.dbPictures), limit(limitQuery)) : 
-        query(collection(this.firestore, this.dbPictures),startAfter(this.lastVisible), limit(limitQuery));
-      const pictures = await getDocs(queryPictures);
-      if (pictures.docChanges().length < limitQuery) {
-         this.noMorePictures$.next(true);
-      }
-      const picturesArray: PictureDTO[] = [];
-      pictures.forEach((picture: any) => {
+      const queryPictures =  query(collection(this.firestore, this.dbPictures), orderBy('time', 'desc')); 
+      const pictures: any = await getDocs(queryPictures);
+      let picturesArray: PictureDTO[] = [];
+      pictures.forEach((picture: any) => {        
         picturesArray.push(picture.data());
       });
-      this.pictures.next([...this.pictures.getValue(), ...picturesArray]);
-      this.lastVisible = pictures.docs[pictures.docs.length - 1];
+      picturesArray = picturesArray.filter((picture: PictureDTO) => picture.topic === this.topicService.topicOfTheDay.topic);
+      this.pictures.next(picturesArray);
     } catch (error) {
       return {
         error: true,
