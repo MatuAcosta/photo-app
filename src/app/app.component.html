@@ -4,5 +4,10 @@
 ></app-header>
 
 <main class="container mx-auto flex flex-col items-center h-screen">
+  @if(showModal){
+   <app-instructions-modal
+    (closeModal)="closeModal($event)"
+   > </app-instructions-modal>
+  }
   <router-outlet></router-outlet>  
 </main>

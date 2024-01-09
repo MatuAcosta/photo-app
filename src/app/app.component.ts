@@ -6,11 +6,12 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { selectAuthLogged } from './ngrx/auth/auth.selector';
 import { DateService } from './services/date.service';
+import { InstructionsModalComponent } from './instructions-modal/instructions-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
+  imports: [InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,8 +21,15 @@ export class AppComponent implements OnInit {
   private dateService: DateService = inject(DateService);
   private platformId: any = inject(PLATFORM_ID);
   public authLogged$: Observable<boolean> = this.store.pipe(select(selectAuthLogged));
-  
+  public showModal: boolean = false;
   constructor(){
+    if(this.platformId === 'browser' && localStorage.getItem('instructions') === null){
+      localStorage.setItem('instructions', 'false');
+      this.showModal = true;
+    }
+    if(this.platformId === 'browser' && localStorage.getItem('instructions') === 'false'){
+      this.showModal = true;
+    }
   }
 
   async ngOnInit(): Promise<any> {
@@ -31,6 +39,11 @@ export class AppComponent implements OnInit {
         localStorage.setItem('date', this.dateService.todayDate.join('-'));
       }
     }
-  
+  }
+  closeModal(event: any){
+    if(this.platformId ==='browser'){
+      localStorage.setItem('instructions', 'true');
+    }
+    this.showModal = false;
   }
 }

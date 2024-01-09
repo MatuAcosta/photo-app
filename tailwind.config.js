@@ -12,6 +12,7 @@ module.exports = {
       animation: {
         'fade': ' fadeIn 3s ease-in-out;',
         'spin': 'spinSlower .5s linear ',
+        'show': 'showSlow 2s ease-in-out'
       },
       keyframes: {
         'fadeIn': {
@@ -29,7 +30,16 @@ module.exports = {
           'to': {
             transform: 'translateX(0px)'
           }
+        },
+        'showSlow':{
+          'from':{
+            transform: 'translateY(-300px)'
+          } ,
+          'to': {
+            transform: 'translateY(0px)'
+          }
         }
+
 
       }
     },
