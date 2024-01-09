@@ -10,7 +10,7 @@ module.exports = {
         poppins: ["Poppins", "sans-serif"],
       },
       animation: {
-        'fade': ' fadeIn 3s ease-in-out;',
+        'fade': ' fadeIn 3s ease-in-out',
         'spin': 'spinSlower .5s linear ',
         'show': 'showSlow 2s ease-in-out'
       },
