@@ -48,7 +48,7 @@ export class AuthComponent implements OnInit {
   } 
   
   addUserNameFormControl(){
-    return this.signForm.addControl('username', new FormControl<string>('', [Validators.required,Validators.minLength(6)]));
+    return this.signForm.addControl('username', new FormControl<string>('', [Validators.required,Validators.minLength(3)]));
   }
 
 

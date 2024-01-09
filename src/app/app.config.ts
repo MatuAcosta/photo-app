@@ -10,10 +10,20 @@ import { provideAnimations } from '@angular/platform-browser/animations'
 import { getFunctions, provideFunctions} from '@angular/fire/functions';
 import { provideStore } from '@ngrx/store';
 import { authReducer } from './ngrx/auth/auth.reducer';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideClientHydration(),
-    importProvidersFrom(provideFirebaseApp(() => initializeApp({ "projectId": "photo-app-cbdeb", "appId": "1:563996376380:web:64782452c5e52634d87239", "storageBucket": "photo-app-cbdeb.appspot.com", "apiKey": "AIzaSyALy3ifVcCWtUbAqAS766EqjIu7D7qEBHk", "authDomain": "photo-app-cbdeb.firebaseapp.com", "messagingSenderId": "563996376380", "measurementId": "G-DFX574X7K9" }))),
+    importProvidersFrom(provideFirebaseApp(() => 
+    initializeApp({ 
+      "projectId": environment.projectId, 
+      "appId": environment.appId,
+      "storageBucket": environment.storageBucket, 
+      "apiKey": environment.apiKey, 
+      "authDomain": environment.authDomain, 
+      "messagingSenderId": environment.messagingSenderId, 
+      "measurementId": environment.measurementId 
+    }))),
     importProvidersFrom(provideAuth(() => getAuth())),
     importProvidersFrom(provideFirestore(() => getFirestore())),
     importProvidersFrom(provideStorage(() => getStorage())),
