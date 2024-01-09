@@ -1,8 +1,7 @@
 <mat-card class="example-card rounded-full w-64 border-2 
 bg-gradient-to-b from-slate-100 from-20% to-gray-300 to-90%
 bg-black bg-opacity-10
-hover:animate-pulse
-hover:border-emerald-400">
+hover:border-emerald-300">
     <img 
       class="w-full h-full  shadow-md"
     mat-card-image [src]="imageSrc">
@@ -10,7 +9,12 @@ hover:border-emerald-400">
       <mat-card-title class="text-slate-800 font-bold font-mono text-md">
         {{username}}
       </mat-card-title>
-      <button mat-button class="flex text-white items-center text-center px-2 py-4 rounded-xl bg-gradient-to-r from-emerald-950 from-20% to-slate-950 to-90% border-2 ">
+      <button 
+        (click)="like()"
+        class=" 
+        flex text-white items-center text-center px-2 py-4 rounded-xl 
+        bg-gradient-to-r from-emerald-950 from-20% to-slate-950 to-90% 
+         hover:text-emerald-500">
         <mat-icon class="mr-2">thumb_up</mat-icon>
         {{likes}}
       </button>

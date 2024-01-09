@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, where } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, updateDoc, where } from '@angular/fire/firestore';
 import { FirebaseStorage, Storage, StorageError, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
@@ -98,5 +98,15 @@ export class PictureService {
     }
   }
 
+  async likePicture(username: string, likes: number) {
+    try {      
+      const pictureRef = doc(this.firestore, this.dbPictures, username);
+      await updateDoc(pictureRef, {
+        likes
+      })
+    } catch (error) {
+      
+    }
+  }
 
 }

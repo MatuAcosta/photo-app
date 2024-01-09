@@ -5,7 +5,7 @@ import { PictureDTO } from '../models/types';
 import { TopicService } from '../services/topic.service';
 import { DocumentData } from '@angular/fire/firestore';
 import { RouterLink } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -21,8 +21,9 @@ export class HomeComponent implements OnInit {
 
   public pictures: PictureDTO[] = [];
   public topicOfTheDay: DocumentData | undefined | null;
-  constructor() { }
-
+  
+  constructor() { 
+  }
   async ngOnInit() {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
       this.pictures = pictures;
@@ -31,6 +32,9 @@ export class HomeComponent implements OnInit {
     this.getPictures();
   }
 
+  dateLocalStorage(){
+    localStorage.setItem('date', JSON.stringify(this.topicOfTheDay?.['date']));
+  }
 
   async getTopicOfTheDay(){
     try {
@@ -51,6 +55,10 @@ export class HomeComponent implements OnInit {
     } catch (error) {
       console.log('error in getPictures', error);
     }
+  }
+
+  likePicture(event: any){
+    this.pictureService.likePicture(event.username,  event.likes);
   }
 
   ngOnDestroy(){

@@ -26,6 +26,7 @@
                 [createdAt]="pic.createdAt"
                 [likes]="pic.likes"
                 [topic]="pic.topic"
+                (likePicture)="likePicture($event)"
             >
             </album>
         }   
