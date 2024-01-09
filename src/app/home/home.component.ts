@@ -6,11 +6,12 @@ import { TopicService } from '../services/topic.service';
 import { DocumentData } from '@angular/fire/firestore';
 import { RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AlbumComponent, RouterLink],
+  imports: [AlbumComponent, RouterLink, KeyValuePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
   private destroy$ = new Subject<void>();
   private platformId: any = inject(PLATFORM_ID);
   public usernameLikes: string[] = [];
-  public pictures: PictureDTO[] = [];
+  public pictures: {[key: string]: PictureDTO} = {};
   public topicOfTheDay: DocumentData | undefined | null;
   
   constructor() { 
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
   }
   async ngOnInit() {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
-      this.pictures = pictures;
+      this.pictures = this.indexPictures(pictures)
     });
     await this.getTopicOfTheDay();
     this.getPictures();
@@ -64,9 +65,8 @@ export class HomeComponent implements OnInit {
     }, {});
     return likesIndexed;
   }
-  indexPictures(){
-    let copyPictures = JSON.parse(JSON.stringify(this.pictures));
-    let pcituresIndexed = copyPictures.reduce((acc: any, picture: PictureDTO) => {
+  indexPictures(picturesArray: PictureDTO[]){
+    let pcituresIndexed = picturesArray.reduce((acc: any, picture: PictureDTO) => {
       acc[picture.username] = picture;
       return acc
     }, {});
@@ -84,13 +84,12 @@ export class HomeComponent implements OnInit {
 
   likePicture(event: any){
     let indexLikes = this.indexLikes();
-    let indexPictures = this.indexPictures();
     if(indexLikes[event.username as keyof typeof indexLikes]){ 
-       indexPictures[event.username as keyof typeof indexPictures].likes -= 1;
+       this.pictures[event.username as keyof typeof this.pictures].likes -= 1;
        this.usernameLikes = this.usernameLikes.filter(
         (username: string) => username !== event.username);
     } else {
-      indexPictures[event.username as keyof typeof indexPictures].likes += 1;
+      this.pictures[event.username as keyof typeof this.pictures].likes += 1;
       this.usernameLikes.push(event.username);
     }
     if(this.platformId === 'browser'){

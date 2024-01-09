@@ -17,15 +17,15 @@
 
     </section>
     <section class="grid grid-cols-2 gap-5 xl:grid-cols-5">
-        @for (pic of pictures ; track pic.username){
+        @for (pic of pictures | keyvalue; track pic.value.username){
             <album 
                 class="animate-fade"
-                [username]="pic.username"
-                [imageSrc]="pic.url"
-                [description]="pic.description"
-                [createdAt]="pic.createdAt"
-                [likes]="pic.likes"
-                [topic]="pic.topic"
+                [username]="pic.value.username"
+                [imageSrc]="pic.value.url"
+                [description]="pic.value.description"
+                [createdAt]="pic.value.createdAt"
+                [likes]="pic.value.likes"
+                [topic]="pic.value.topic"
                 (likePicture)="likePicture($event)"
             >
             </album>
