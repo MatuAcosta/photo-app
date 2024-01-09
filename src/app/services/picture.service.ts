@@ -91,6 +91,7 @@ export class PictureService {
       picturesArray = picturesArray.filter((picture: PictureDTO) => picture.topic === this.topicService.topicOfTheDay.topic);
       this.pictures.next(picturesArray);
     } catch (error) {
+      //console.log('error pictures', error);
       return {
         error: true,
         data: error
