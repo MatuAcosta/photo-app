@@ -18,17 +18,28 @@ export class AlbumComponent {
   @Input() createdAt: string | undefined;
   @Input() topic: string | undefined;
   private platformId: any = inject(PLATFORM_ID);
-
-  public usernameLikes: string[] = 
-  this.platformId === 'browser ' ? JSON.parse(localStorage.getItem('usernameLikes') || '[]') : null;
+  public usernameLikes: string[] = [];
   
+  constructor(){
+    if(this.platformId === 'browser'){
+      this.usernameLikes = JSON.parse(localStorage.getItem('usernameLikes') || '[]');
+    }
+  }
   @Output() likePicture: EventEmitter<any> = new EventEmitter<any>()
 
-  
+
+  indexLikes(){
+    let likesIndexed = this.usernameLikes.reduce((acc: any, username: string) => {
+      acc[username] = username;
+      return acc
+    }, {});
+    return likesIndexed;
+  }
 
 
   like() {
-    if(this.usernameLikes.find((username: string) => username === this.username)){ 
+    let indexLikes = this.indexLikes();
+    if(indexLikes[this.username as string]){ 
        this.likes -= 1;
        this.usernameLikes = this.usernameLikes.filter((username: string) => username !== this.username);
     } else {

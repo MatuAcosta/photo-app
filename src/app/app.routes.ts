@@ -7,17 +7,24 @@ import { HomeComponent } from './home/home.component';
 export const routes: Routes = [
     {
         path:'home',
-        component: HomeComponent,
+        title:'PicTopic',
+        loadComponent() {
+            return import('./home/home.component').then(m => m.HomeComponent);
+        },
     },
     {
         path:'sign-up',
-        title:'auth',
-        component: AuthComponent
+        title:'PicTopic',
+        loadComponent() {
+            return import('./auth/auth.component').then(m => m.AuthComponent);
+        },
     },
     {
         path:'sign-in',
-        title:'auth',
-        component: AuthComponent
+        title:'PicTopic',
+        loadComponent() {
+            return import('./auth/auth.component').then(m => m.AuthComponent);
+        },
     },
     {
         path: '',
@@ -26,7 +33,10 @@ export const routes: Routes = [
     },
     {
         path:'upload',
-        component: UploadComponent,
+        title:'PicTopic',
+        loadComponent() {
+            return import('./images/upload/upload.component').then(m => m.UploadComponent);
+        },
         canActivate: [authGuard]
     }
 ];
