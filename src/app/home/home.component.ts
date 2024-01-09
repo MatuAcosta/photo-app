@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { AlbumComponent } from '../images/album/album.component';
 import { PictureService } from '../services/picture.service';
 import { PictureDTO } from '../models/types';
@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
   private pictureService: PictureService = inject(PictureService);
   private topicService: TopicService = inject(TopicService);
   private destroy$ = new Subject<void>();
+  private platformId: any = inject(PLATFORM_ID);
 
   public pictures: PictureDTO[] = [];
   public topicOfTheDay: DocumentData | undefined | null;
@@ -33,7 +34,10 @@ export class HomeComponent implements OnInit {
   }
 
   dateLocalStorage(){
-    localStorage.setItem('date', JSON.stringify(this.topicOfTheDay?.['date']));
+    if (this.platformId === 'browser'){
+      localStorage.setItem('date', JSON.stringify(this.topicOfTheDay?.['date']));
+    }
+
   }
 
   async getTopicOfTheDay(){

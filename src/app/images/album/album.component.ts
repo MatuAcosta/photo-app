@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, PLATFORM_ID, inject } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import { platform } from 'os';
 
 @Component({
   selector: 'album',
@@ -16,7 +17,10 @@ export class AlbumComponent {
   @Input() likes: number = 0;
   @Input() createdAt: string | undefined;
   @Input() topic: string | undefined;
-  public usernameLikes: string[] = JSON.parse(localStorage.getItem('usernameLikes') || '[]');
+  private platformId: any = inject(PLATFORM_ID);
+
+  public usernameLikes: string[] = 
+  this.platformId === 'browser ' ? JSON.parse(localStorage.getItem('usernameLikes') || '[]') : null;
   
   @Output() likePicture: EventEmitter<any> = new EventEmitter<any>()
 
@@ -31,7 +35,9 @@ export class AlbumComponent {
       this.likes += 1;
       this.usernameLikes.push(this.username || '');
     }
-    localStorage.setItem('usernameLikes', JSON.stringify(this.usernameLikes));
+    if(this.platformId === 'browser'){
+      localStorage.setItem('usernameLikes', JSON.stringify(this.usernameLikes));
+    }
     return this.likePhoto();
   }
 
