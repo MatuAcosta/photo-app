@@ -48,7 +48,7 @@ export class UserService {
       if(docSnap.exists()){
         return {
           error: false,
-          message: 'Username exists',
+          message: 'Username already exists',
           user: docSnap.data()
         }
       }
@@ -75,7 +75,7 @@ export class UserService {
       });
       return createdUser;
     } catch (error) {
-      console.log('error createUser', error);
+      //console.log('error createUser', error);
       return error;
     }
   }

@@ -19,11 +19,14 @@ export class HomeComponent implements OnInit {
   private topicService: TopicService = inject(TopicService);
   private destroy$ = new Subject<void>();
   private platformId: any = inject(PLATFORM_ID);
-
+  public usernameLikes: string[] = [];
   public pictures: PictureDTO[] = [];
   public topicOfTheDay: DocumentData | undefined | null;
   
   constructor() { 
+    if(this.platformId === 'browser'){
+      this.usernameLikes = JSON.parse(localStorage.getItem('usernameLikes') || '[]');
+    }
   }
   async ngOnInit() {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
@@ -53,6 +56,24 @@ export class HomeComponent implements OnInit {
   }
 
 
+  indexLikes(){
+    let copyUsername = JSON.parse(JSON.stringify(this.usernameLikes));
+    let likesIndexed = copyUsername.reduce((acc: any, username: string) => {
+      acc[username] = username;
+      return acc
+    }, {});
+    return likesIndexed;
+  }
+  indexPictures(){
+    let copyPictures = JSON.parse(JSON.stringify(this.pictures));
+    let pcituresIndexed = copyPictures.reduce((acc: any, picture: PictureDTO) => {
+      acc[picture.username] = picture;
+      return acc
+    }, {});
+    return pcituresIndexed;
+  }
+
+
   async getPictures(){
     try {
       await this.pictureService.getPictures();
@@ -62,6 +83,19 @@ export class HomeComponent implements OnInit {
   }
 
   likePicture(event: any){
+    let indexLikes = this.indexLikes();
+    let indexPictures = this.indexPictures();
+    if(indexLikes[event.username as keyof typeof indexLikes]){ 
+       indexPictures[event.username as keyof typeof indexPictures].likes -= 1;
+       this.usernameLikes = this.usernameLikes.filter(
+        (username: string) => username !== event.username);
+    } else {
+      indexPictures[event.username as keyof typeof indexPictures].likes += 1;
+      this.usernameLikes.push(event.username);
+    }
+    if(this.platformId === 'browser'){
+      localStorage.setItem('usernameLikes', JSON.stringify(this.usernameLikes));
+    }
     this.pictureService.likePicture(event.username,  event.likes);
   }
 

@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   async ngOnInit(): Promise<any> {
     if (this.platformId === 'browser'){
       if (localStorage.getItem('date') !== this.dateService.todayDate.join('-')){
-        localStorage.clear();
+        localStorage.removeItem('usernameLikes')
         localStorage.setItem('date', this.dateService.todayDate.join('-'));
       }
     }

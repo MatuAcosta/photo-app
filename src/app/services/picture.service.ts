@@ -30,10 +30,10 @@ export class PictureService {
     uploadTask.on('state_changed',
     (snapshot) => {
       this.uploadProgress.next((snapshot.bytesTransferred / snapshot.totalBytes) * 100);  
-      console.log('Upload is ' + this.uploadProgress.getValue() + '% done');
+      //console.log('Upload is ' + this.uploadProgress.getValue() + '% done');
     },
     (error: StorageError) => {
-      console.log('error in uploadPicture', error);
+      //console.log('error in uploadPicture', error);
       return {
         error: true,
         message: 'error uploading picture'
@@ -41,7 +41,7 @@ export class PictureService {
     },
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: string) => { 
-        console.log('File available at', downloadURL);
+        //console.log('File available at', downloadURL);
         this.urlPicture.next(downloadURL);
         return {
           error: false,
@@ -65,10 +65,10 @@ export class PictureService {
       this.setUrl('');
       return {
         error: false,
-        message: 'picture created'
+        message: 'Picture uploaded successfully'
       };
     } catch (error) {
-      console.log('error createPicture', error)
+      //console.log('error createPicture', error)
       return {
         error: true, 
         message: ''

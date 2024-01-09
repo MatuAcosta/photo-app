@@ -4,6 +4,8 @@ import { UserCredential, createUserWithEmailAndPassword } from '@firebase/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ResponseGeneric, UserAuth } from '../models/types';
 import { UserService } from './user.service';
+import { FirebaseError } from '@angular/fire/app';
+import { ErrorFirebase } from '../utils/error';
 @Injectable({
   providedIn: 'root',
   
@@ -36,17 +38,17 @@ export class AuthService {
         this.setUser(email);
         return {
           error: false,
-          message: 'User created'
+          message: 'Register Successfully'
         }
       } catch (error) {
         throw Error();
       }
     })
-    .catch((error: any) => {
-      console.log('error signup', error)
+    .catch((error: FirebaseError) => {
+      console.log(error);
       return {
         error: true,
-        message: error.message
+        message: ErrorFirebase[error.code as keyof typeof ErrorFirebase]
       }; 
     });
   }
@@ -62,14 +64,14 @@ export class AuthService {
       this.setUser(email);
       return {
         error: false,
-        message: 'User logged'
+        message: 'Login Successfully'
       }
     })
-    .catch((error) => {
-      console.log('error login', error);
+    .catch((error: FirebaseError) => {
+      //console.log('error login', error);
       return { 
         error: true,
-        message: error.message
+        message: ErrorFirebase[error.code as keyof typeof ErrorFirebase]
       }
     });
   }

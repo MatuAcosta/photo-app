@@ -4,6 +4,8 @@ import { PictureService } from '../../services/picture.service';
 import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { Router, RouterModule } from '@angular/router';
+import Toastify from 'toastify-js';
+import { colorsToastify } from '../../utils/constants';
 
 @Component({
   selector: 'app-upload',
@@ -69,7 +71,7 @@ export class UploadComponent implements OnInit, OnDestroy{
       let path = `images/${user?.username}/${this.imageUploaded?.name}`;
       this.pictureService.uploadPictureToStorage(this.imageUploaded, path);
     } catch (error) {
-      console.log('error uploadImageToStorage', error);
+      return this.toastify('Error uploading image', true)
     }
   }
 
@@ -80,9 +82,10 @@ export class UploadComponent implements OnInit, OnDestroy{
       let picture = await this.pictureService.createPicture(url, username, description);
       console.log('picture', picture);
       if(picture.error) throw new Error(picture.message);
-      alert(picture.message);
+      return this.toastify(picture.message)
     } catch (error) {
-      console.log('error uploadImageToStore', error);
+      //console.log('error uploadImageToStore', error);
+      return this.toastify('Error uploading image', true)
     } 
   }
 
@@ -93,7 +96,7 @@ export class UploadComponent implements OnInit, OnDestroy{
   }
   
   onFileSelected(e: any){
-    console.log('e', e);
+    //console.log('e', e);
     if(e.target.files.length > 1) return alert('Solo puedes subir una imagen');
     if(!this.verifyFile(e.target.files[0])) return alert('Solo puedes subir imagenes');
     this.imageUploaded = e.target.files[0];
@@ -108,5 +111,22 @@ export class UploadComponent implements OnInit, OnDestroy{
     this.ngZone.run(() => setTimeout(() => {this.router.navigate([`/${path}`])},time));
       
   }
+
+  toastify(text: string, error?: boolean){
+    return Toastify({
+      text,
+      duration: 3000,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: error ? `linear-gradient(to right,${colorsToastify.error[0]},${colorsToastify.error[1]})` 
+        : `linear-gradient(to right, ${colorsToastify.success[0]}, ${colorsToastify.success[1]})`
+      },
+      onClick: function(){} // Callback after click
+    }).showToast();
+  }
+
 
 }

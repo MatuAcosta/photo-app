@@ -2,14 +2,17 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { login, logout } from '../ngrx/auth/auth.actions';
-
+import Toastify from 'toastify-js';
+import { sign } from 'crypto';
+import { PASSWORD_REGEXP, colorsToastify } from '../utils/constants';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+     CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css'
 })
@@ -35,12 +38,13 @@ export class AuthComponent implements OnInit {
 
   public signForm: any = this.fb.group({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
-    password: new FormControl<string>('', [Validators.required,Validators.minLength(6)]),
+    password: new FormControl<string>('', [Validators.required, Validators.pattern(PASSWORD_REGEXP)]),
   });
 
 
 
   ngOnInit(){
+    
   } 
   
   addUserNameFormControl(){
@@ -55,34 +59,54 @@ export class AuthComponent implements OnInit {
 
   async signIn(e: SubmitEvent){
     e.preventDefault();
-    if(!this.signForm.valid) return console.log('Not valid form');
+    if(!this.signForm.valid) return this.toastify('Email or password incorrect', true);
     const {email, password} = this.signForm.value;
     try {
       let signIn = await this.authService.signIn(String(email), String(password));
-      if(signIn.error) return console.log('Error signup', signIn.message);
+      if(signIn.error) throw new Error(signIn.message);
       console.log(signIn.message);
       this.navigateToHome();
       this.login();
-    } catch (error) {
-      console.log(error);
+      this.toastify(signIn.message);
+    } catch (error: any) {
+      this.toastify(error.message, true);
+
     }
 
   }
 
   async signUp(e: SubmitEvent){
     e.preventDefault();
-    if(!this.signForm.valid) return console.log('Not valid form');
+    if(this.signForm.controls.password.invalid) return this.toastify('Password should be at least 6 characters, contain one number, one uppercase and one lowercase at least', true);
+    if(!this.signForm.valid) return this.toastify('Email or password incorrect', true);
+    
     const {email, password, username} = this.signForm.value;
     try {
       let signUp = await this.authService.signUp(String(email), String(password), String(username));
-      if(signUp.error) return console.log('Error signup', signUp.message);
+      if(signUp.error) throw new Error(signUp.message);
       console.log(signUp.message);
       this.navigateToHome();
       this.login();
-    } catch (error) {
-      console.log(error);
+      this.toastify(signUp.message);
+    } catch (error: any) {
+      this.toastify(error.message, true);
     }
+  }
 
+  toastify(text: string, error?: boolean){
+    return Toastify({
+      text,
+      duration: 3000,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: error ? `linear-gradient(to right,${colorsToastify.error[0]},${colorsToastify.error[1]})` 
+        : `linear-gradient(to right, ${colorsToastify.success[0]}, ${colorsToastify.success[1]})`
+      },
+      onClick: function(){} // Callback after click
+    }).showToast();
   }
 
   login(){
