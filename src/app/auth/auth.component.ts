@@ -28,7 +28,7 @@ export class AuthComponent implements OnInit {
 
 
   constructor(){
-    console.log(this.route.url);
+    //console.log(this.route.url);
     if(this.route.url === '/sign-up') this.isSignUp = true;
     if(this.isSignUp) this.addUserNameFormControl();
     this.h2Text = this.isSignUp ? 'Sign up to upload your photo' : 'Sign in to upload your photo';
@@ -64,7 +64,7 @@ export class AuthComponent implements OnInit {
     try {
       let signIn = await this.authService.signIn(String(email), String(password));
       if(signIn.error) throw new Error(signIn.message);
-      console.log(signIn.message);
+      //console.log(signIn.message);
       this.navigateToHome();
       this.login();
       this.toastify(signIn.message);
@@ -84,7 +84,7 @@ export class AuthComponent implements OnInit {
     try {
       let signUp = await this.authService.signUp(String(email), String(password), String(username));
       if(signUp.error) throw new Error(signUp.message);
-      console.log(signUp.message);
+      //console.log(signUp.message);
       this.navigateToHome();
       this.login();
       this.toastify(signUp.message);

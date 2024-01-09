@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
       if(this.topicService.topicOfTheDay){
         this.topicOfTheDay = this.topicService.topicOfTheDay;
       }
-      console.log('topicOfTheDay', this.topicOfTheDay);
+      //console.log('topicOfTheDay', this.topicOfTheDay);
     } catch (error) {
       
     }
@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
     try {
       await this.pictureService.getPictures();
     } catch (error) {
-      console.log('error in getPictures', error);
+      //console.log('error in getPictures', error);
     }
   }
 

@@ -45,7 +45,7 @@ export class AuthService {
       }
     })
     .catch((error: FirebaseError) => {
-      console.log(error);
+      //console.log(error);
       return {
         error: true,
         message: ErrorFirebase[error.code as keyof typeof ErrorFirebase]

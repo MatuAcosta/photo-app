@@ -13,7 +13,7 @@ export class TopicService {
   constructor() { }
 
   async getTopicOfTheDay(){
-    console.log(this.dateService.todayDate.join('-'));
+    //console.log(this.dateService.todayDate.join('-'));
     
     const docRef = doc(this.firestore, this.topicDb, this.dateService.todayDate.join('-'));    
     const docSnap = await getDoc(docRef);

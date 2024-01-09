@@ -80,7 +80,7 @@ export class UploadComponent implements OnInit, OnDestroy{
   async uploadImageToStore(url: string, username: string , description:string){
     try {
       let picture = await this.pictureService.createPicture(url, username, description);
-      console.log('picture', picture);
+      //console.log('picture', picture);
       if(picture.error) throw new Error(picture.message);
       return this.toastify(picture.message)
     } catch (error) {

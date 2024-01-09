@@ -21,7 +21,7 @@ export class HeaderComponent {
     
   }
   ngOnInit(): void {
-    console.log('logged', this.logged);
+    //console.log('logged', this.logged);
   }
   logout(){
     this.toastify('Logout success');
