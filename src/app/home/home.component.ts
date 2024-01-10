@@ -85,9 +85,11 @@ export class HomeComponent implements OnInit {
   async likePicture(event: any){
     let indexLikes = this.indexLikes();
     if(indexLikes[event.username as keyof typeof indexLikes]){ 
-       this.pictures[event.username as keyof typeof this.pictures].likes -= 1;
-       this.usernameLikes = this.usernameLikes.filter(
-        (username: string) => username !== event.username);
+      if(this.pictures[event.username as keyof typeof this.pictures].likes > 0){
+        this.pictures[event.username as keyof typeof this.pictures].likes -= 1;
+        this.usernameLikes = this.usernameLikes.filter(
+         (username: string) => username !== event.username);
+      }
     } else {
       this.pictures[event.username as keyof typeof this.pictures].likes += 1;
       this.usernameLikes.push(event.username);
