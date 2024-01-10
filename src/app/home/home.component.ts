@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  likePicture(event: any){
+  async likePicture(event: any){
     let indexLikes = this.indexLikes();
     if(indexLikes[event.username as keyof typeof indexLikes]){ 
        this.pictures[event.username as keyof typeof this.pictures].likes -= 1;
@@ -95,7 +95,8 @@ export class HomeComponent implements OnInit {
     if(this.platformId === 'browser'){
       localStorage.setItem('usernameLikes', JSON.stringify(this.usernameLikes));
     }
-    this.pictureService.likePicture(event.username,  event.likes);
+    let likes = this.pictures[event.username as keyof typeof this.pictures].likes;
+    await this.pictureService.likePicture(event.username, likes);
   }
 
   ngOnDestroy(){
