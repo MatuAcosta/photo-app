@@ -96,6 +96,7 @@ export class HomeComponent implements OnInit {
       localStorage.setItem('usernameLikes', JSON.stringify(this.usernameLikes));
     }
     let likes = this.pictures[event.username as keyof typeof this.pictures].likes;
+    if(likes < 0) likes = 0;
     await this.pictureService.likePicture(event.username, likes);
   }
 
