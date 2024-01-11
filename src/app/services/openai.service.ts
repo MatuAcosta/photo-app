@@ -20,7 +20,7 @@ export class OpenaiService {
       this.http.post<any>('https://api.openai.com/v1/chat/completions',{
         messages:[{
           role:'user',
-          content: `TGive me an interesting topic, just 1 or 2 words`
+          content: `Give me a normal topic, just 1 or 2 words`
         }],
         model: 'gpt-3.5-turbo'
       } ,{
