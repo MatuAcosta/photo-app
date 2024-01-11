@@ -1,7 +1,5 @@
 import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { logout } from '../../ngrx/auth/auth.actions';
 import Toastify from 'toastify-js';
 import { colorsToastify } from '../../utils/constants';
 import { NgClass } from '@angular/common';

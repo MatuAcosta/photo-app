@@ -6,11 +6,12 @@ import { DateService } from './services/date.service';
 import { InstructionsModalComponent } from './instructions-modal/instructions-modal.component';
 import { AuthService } from './services/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
+  imports: [ FooterComponent, InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
