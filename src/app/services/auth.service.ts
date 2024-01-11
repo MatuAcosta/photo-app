@@ -21,7 +21,7 @@ export class AuthService {
   verifyAuth(){    
     const unsuscribe = 
     this.authFirebase.onAuthStateChanged((user: User | null) => {
-      console.log('user', user);
+      //console.log('user', user);
       if(user){
         this.userAuth.next({
           email: user.email,

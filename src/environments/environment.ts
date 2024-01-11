@@ -5,5 +5,6 @@ export const environment = {
     "apiKey": import.meta.env['NG_APP_apiKey'], 
     "authDomain":  import.meta.env['NG_APP_authDomain'], 
     "messagingSenderId": import.meta.env['NG_APP_messagingSenderId'], 
-    "measurementId": import.meta.env['NG_APP_measurementId'] 
+    "measurementId": import.meta.env['NG_APP_measurementId'],
+    'openAIKEY': import.meta.env['NG_APP_openAiKEY'],
 };

@@ -24,12 +24,11 @@ export class HomeComponent implements OnInit {
   private store: Store<any> = inject(Store<any>);
   public authLogged$: Observable<boolean> = this.store.pipe(select(selectAuthLogged));
   private pictureService: PictureService = inject(PictureService);
-  private topicService: TopicService = inject(TopicService);
   private destroy$ = new Subject<void>();
   private userService: UserService = inject(UserService);
   private platformId: any = inject(PLATFORM_ID);
   public pictures: {[key: string]: PictureDTO} = {};
-  public topicOfTheDay: DocumentData | undefined | null;
+  public topicService: TopicService = inject(TopicService);
   
   constructor() { 
   }
@@ -37,13 +36,15 @@ export class HomeComponent implements OnInit {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
       this.pictures = this.indexPictures(pictures)
     });
-    await this.getTopicOfTheDay();
+    if(!this.topicService.topicOfTheDay){
+      await this.getTopicOfTheDay();
+    }
     this.getPictures();
   }
 
   dateLocalStorage(){
     if (this.platformId === 'browser'){
-      localStorage.setItem('date', JSON.stringify(this.topicOfTheDay?.['date']));
+      localStorage.setItem('date', JSON.stringify(this.topicService.topicOfTheDay?.['date']));
     }
 
   }
@@ -51,9 +52,6 @@ export class HomeComponent implements OnInit {
   async getTopicOfTheDay(){
     try {
       await this.topicService.getTopicOfTheDay();
-      if(this.topicService.topicOfTheDay){
-        this.topicOfTheDay = this.topicService.topicOfTheDay;
-      }
     } catch (error) {
       
     }

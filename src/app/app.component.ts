@@ -2,23 +2,25 @@ import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import {  RouterLink, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
-import { Store } from '@ngrx/store';
 import { DateService } from './services/date.service';
 import { InstructionsModalComponent } from './instructions-modal/instructions-modal.component';
 import { AuthService } from './services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
+  imports: [ InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent implements OnInit {
   title = 'photo-app';
   private dateService: DateService = inject(DateService);
   private platformId: any = inject(PLATFORM_ID);
-  public authService: AuthService = inject(AuthService);
+  private http: HttpClient = inject(HttpClient);  
+public authService: AuthService = inject(AuthService);
   public showModal: boolean = false;
   constructor(){
     if(this.platformId === 'browser' && localStorage.getItem('instructions') === null){
@@ -37,7 +39,11 @@ export class AppComponent implements OnInit {
         localStorage.setItem('date', this.dateService.todayDate.join('-'));
       }
     }
+
+    
+
   }
+
   closeModal(event: any){
     if(this.platformId ==='browser'){
       localStorage.setItem('instructions', 'true');

@@ -29,4 +29,6 @@ export type PictureDTO = {
 export type TopicDTO = {
     topic: string;
     date: string;
+    phrase:string;
 }
+

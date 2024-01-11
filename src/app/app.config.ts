@@ -11,6 +11,7 @@ import { getFunctions, provideFunctions} from '@angular/fire/functions';
 import { provideStore } from '@ngrx/store';
 import { authReducer } from './ngrx/auth/auth.reducer';
 import { environment } from '../environments/environment';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideClientHydration(),
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
       "messagingSenderId": environment.messagingSenderId, 
       "measurementId": environment.measurementId 
     }))),
+    provideHttpClient(withFetch()),
     importProvidersFrom(provideAuth(() => getAuth())),
     importProvidersFrom(provideFirestore(() => getFirestore())),
     importProvidersFrom(provideStorage(() => getStorage())),
