@@ -14,11 +14,13 @@ export class AlbumComponent {
   @Input() username: string | undefined;
   @Input() description: string | undefined;
   @Input() imageSrc: string | undefined;
-  @Input() likes: number = 0;
+  @Input() likes: string[] | undefined;
   @Input() createdAt: string | undefined;
   @Input() topic: string | undefined;
   
-  constructor(){}
+  constructor(){
+    console.log(this.likes?.length);
+  }
   @Output() likePicture: EventEmitter<any> = new EventEmitter<any>()
 
 

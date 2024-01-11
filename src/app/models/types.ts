@@ -22,7 +22,7 @@ export type PictureDTO = {
     description: string;
     createdAt: string;
     topic: string;
-    likes: number;
+    likes: string[]; // array of users that liked the picture
     time: number;
 }
 

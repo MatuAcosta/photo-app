@@ -1,10 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, updateDoc, where } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs,  orderBy, query, setDoc,  updateDoc } from '@angular/fire/firestore';
 import { FirebaseStorage, Storage, StorageError, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
 import { DateService } from './date.service';
 import { TopicService } from './topic.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class PictureService {
   private storage: FirebaseStorage = inject(Storage);
   private dateService: DateService = inject(DateService);
   private topicService: TopicService = inject(TopicService);
+  private userService: UserService = inject(UserService);
   private uploadProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private urlPicture: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private dbPictures: string = 'pictures';  
@@ -59,7 +61,7 @@ export class PictureService {
         description,
         createdAt: this.dateService.todayDate.join('-'),
         time: this.dateService.today.getTime(),
-        likes: 0,
+        likes: [],
         topic: this.topicService.topicOfTheDay.topic
       });
       this.setUrl('');
@@ -99,14 +101,16 @@ export class PictureService {
     }
   }
 
-  async likePicture(username: string, likes: number) {
-    try {      
+  async likePicture(username: string, likes: string[]) {
+    try {    
       const pictureRef = doc(this.firestore, this.dbPictures, username);
       await updateDoc(pictureRef, {
         likes
       })
     } catch (error) {
       
+    } 
+    finally{
     }
   }
 

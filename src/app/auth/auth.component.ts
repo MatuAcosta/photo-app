@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { login, logout } from '../ngrx/auth/auth.actions';
 import Toastify from 'toastify-js';
-import { sign } from 'crypto';
 import { PASSWORD_REGEXP, colorsToastify } from '../utils/constants';
 @Component({
   selector: 'app-auth',
@@ -25,7 +24,7 @@ export class AuthComponent implements OnInit {
 
   public h2Text: string | undefined;
   public buttonText: string | undefined;
-
+  public showPassword: boolean = false;
 
   constructor(){
     //console.log(this.route.url);
@@ -91,6 +90,9 @@ export class AuthComponent implements OnInit {
     } catch (error: any) {
       this.toastify(error.message, true);
     }
+  }
+  togglePassword(){
+    this.showPassword = !this.showPassword;
   }
 
   toastify(text: string, error?: boolean){

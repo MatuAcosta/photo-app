@@ -20,14 +20,10 @@ export class HomeComponent implements OnInit {
   private topicService: TopicService = inject(TopicService);
   private destroy$ = new Subject<void>();
   private platformId: any = inject(PLATFORM_ID);
-  public usernameLikes: string[] = [];
   public pictures: {[key: string]: PictureDTO} = {};
   public topicOfTheDay: DocumentData | undefined | null;
   
   constructor() { 
-    if(this.platformId === 'browser'){
-      this.usernameLikes = JSON.parse(localStorage.getItem('usernameLikes') || '[]');
-    }
   }
   async ngOnInit() {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
@@ -50,21 +46,25 @@ export class HomeComponent implements OnInit {
       if(this.topicService.topicOfTheDay){
         this.topicOfTheDay = this.topicService.topicOfTheDay;
       }
-      //console.log('topicOfTheDay', this.topicOfTheDay);
     } catch (error) {
       
     }
   }
 
 
-  indexLikes(){
-    let copyUsername = JSON.parse(JSON.stringify(this.usernameLikes));
+  indexLikesOfAPicture(userLikes: string[]){
+    let copyUsername = JSON.parse(JSON.stringify(userLikes));
     let likesIndexed = copyUsername.reduce((acc: any, username: string) => {
       acc[username] = username;
       return acc
     }, {});
     return likesIndexed;
   }
+  /**
+   * 
+   * @param picturesArray 
+   * @returns {[key: username]: PictureDTO} object of pictures indexed by username
+   */
   indexPictures(picturesArray: PictureDTO[]){
     let pcituresIndexed = picturesArray.reduce((acc: any, picture: PictureDTO) => {
       acc[picture.username] = picture;
@@ -83,23 +83,15 @@ export class HomeComponent implements OnInit {
   }
 
   async likePicture(event: any){
-    let indexLikes = this.indexLikes();
+    let pictureLikes = this.pictures[event.username as keyof typeof this.pictures].likes;
+    let indexLikes = this.indexLikesOfAPicture(pictureLikes);
     if(indexLikes[event.username as keyof typeof indexLikes]){ 
-      if(this.pictures[event.username as keyof typeof this.pictures].likes > 0){
-        this.pictures[event.username as keyof typeof this.pictures].likes -= 1;
-        this.usernameLikes = this.usernameLikes.filter(
-         (username: string) => username !== event.username);
-      }
+      this.pictures[event.username as keyof typeof this.pictures].likes = pictureLikes.filter((username: string) => username !== event.username);
     } else {
-      this.pictures[event.username as keyof typeof this.pictures].likes += 1;
-      this.usernameLikes.push(event.username);
+      this.pictures[event.username as keyof typeof this.pictures].likes.push(event.username);
     }
-    if(this.platformId === 'browser'){
-      localStorage.setItem('usernameLikes', JSON.stringify(this.usernameLikes));
-    }
-    let likes = this.pictures[event.username as keyof typeof this.pictures].likes;
-    if(likes < 0) likes = 0;
-    await this.pictureService.likePicture(event.username, likes);
+    pictureLikes = this.pictures[event.username as keyof typeof this.pictures].likes;
+    await this.pictureService.likePicture(event.username, pictureLikes);
   }
 
   ngOnDestroy(){

@@ -6,25 +6,32 @@ mt-24 rounded-lg">
     <h2 class="my-4 font-mono text-white text-xl">{{h2Text}}</h2>
     <form class="flex flex-col my-2" 
         [formGroup]="signForm" (ngSubmit)="handleSubmit($event)">
-        <div class="text-md mx-2 my-2">
+        <div class="flex flex-col text-md mx-2 my-2 pr-5">
             <label class="text-white" for="email">Email </label>
-            <input class="mt-1" id="email" type="text" formControlName="email">
+            <input class="mt-1 w-72 " id="email" type="text" formControlName="email">
 
         </div>
         @if(isSignUp){
-            <div class="text-md mx-2 my-2" >
+            <div class="text-md mx-2 my-2 flex flex-col " >
                 <label class="text-white" for="username">Username </label>
-                <input class="mt-1" id="username" type="text" formControlName="username">
+                <input class="mt-1 w-72" id="username" type="text" formControlName="username">
             
             </div>
         }
-        <div class="text-md mx-2 my-2">
+        <div class="text-md ml-2 my-2 flex flex-col ">
             <label class=" text-white" for="password">Password </label>
-            <input class="mt-1" id="password" type="password" formControlName="password">
-        </div>
+                <section class="flex">
+                    <input class="mt-1 w-72" id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password">
+                    <button class="text-white" type="button" (click)="togglePassword()">
+                        <img 
+                            class="w-4 h-4 text-white ml-3"
+                            [src]="showPassword ? './assets/hide_password.svg' : './assets/show_password.svg'" />
+                    </button>
+                </section>
 
+        </div>
         <button class="py-2 hover:bg-emerald-900 border-2 hover:border-emerald-400
-        bg-gradient-to-r from-slate-900 from-20% to-slate-950 to-90% self-center text-white mb-2 mt-4 rounded-xl w-48" type="submit">
+        bg-gradient-to-r from-slate-900 from-20% to-slate-950 to-90% self-center text-white mb-2 mt-5 rounded-xl w-48" type="submit">
             {{buttonText}}
         </button>
     </form>
