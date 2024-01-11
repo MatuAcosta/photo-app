@@ -101,14 +101,14 @@ export class HomeComponent implements OnInit {
     } 
     let pictureLikes = this.pictures[event.username as keyof typeof this.pictures].likes;
     let indexLikes = this.indexLikesOfAPicture(pictureLikes);
-    if(indexLikes[event.username as keyof typeof indexLikes]){ 
-      this.pictures[event.username as keyof typeof this.pictures].likes = pictureLikes.filter((username: string) => username !== event.username);
+    if(indexLikes[userDTO.username as keyof typeof indexLikes]){ 
+      this.pictures[event.username as keyof typeof this.pictures].likes = pictureLikes.filter((username: string) => username !== userDTO.username);
     } else {
-      this.pictures[event.username as keyof typeof this.pictures].likes.push(event.username);
+      this.pictures[event.username as keyof typeof this.pictures].likes.push(userDTO.username);
     }
     pictureLikes = this.pictures[event.username as keyof typeof this.pictures].likes;
     try {
-      await this.pictureService.likePicture(userDTO?.username , pictureLikes);
+      await this.pictureService.likePicture(event.username , pictureLikes);
     } catch (error) {
       console.log('error likePicture', error);
     } finally {
