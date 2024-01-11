@@ -4,18 +4,23 @@ import { Store } from '@ngrx/store';
 import { logout } from '../../ngrx/auth/auth.actions';
 import Toastify from 'toastify-js';
 import { colorsToastify } from '../../utils/constants';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive,NgClass],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
   @Input() logged: any;
   private store: Store<any> = inject(Store<any>);
-
+  public displayHeader: boolean = false;
+  
+  toggleHeader(){
+    this.displayHeader = !this.displayHeader;
+  }
 
   constructor() { 
     
