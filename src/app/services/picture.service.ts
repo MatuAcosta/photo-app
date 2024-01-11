@@ -15,7 +15,6 @@ export class PictureService {
   private storage: FirebaseStorage = inject(Storage);
   private dateService: DateService = inject(DateService);
   private topicService: TopicService = inject(TopicService);
-  private userService: UserService = inject(UserService);
   private uploadProgress: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private urlPicture: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private dbPictures: string = 'pictures';  

@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output, PLATFORM_ID, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
-import { platform } from 'os';
+
 
 @Component({
   selector: 'album',
@@ -17,9 +17,7 @@ export class AlbumComponent {
   @Input() likes: string[] | undefined;
   @Input() createdAt: string | undefined;
   @Input() topic: string | undefined;
-  
   constructor(){
-    console.log(this.likes?.length);
   }
   @Output() likePicture: EventEmitter<any> = new EventEmitter<any>()
 
