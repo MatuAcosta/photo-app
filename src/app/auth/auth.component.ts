@@ -65,7 +65,6 @@ export class AuthComponent implements OnInit {
       if(signIn.error) throw new Error(signIn.message);
       //console.log(signIn.message);
       this.navigateToHome();
-      this.login();
       this.toastify(signIn.message);
     } catch (error: any) {
       this.toastify(error.message, true);
@@ -85,12 +84,25 @@ export class AuthComponent implements OnInit {
       if(signUp.error) throw new Error(signUp.message);
       //console.log(signUp.message);
       this.navigateToHome();
-      this.login();
       this.toastify(signUp.message);
     } catch (error: any) {
       this.toastify(error.message, true);
     }
   }
+
+  async signInWithGoogle(){
+    try {
+      let signGoogle = await this.authService.signInWithGoogle();
+      if(signGoogle.error) throw new Error(signGoogle.message);
+      //console.log(signGoogle.message);
+      this.navigateToHome();
+      this.toastify(signGoogle.message);
+    } catch (error) {
+      
+    }
+  }
+
+
   togglePassword(){
     this.showPassword = !this.showPassword;
   }
@@ -111,12 +123,12 @@ export class AuthComponent implements OnInit {
     }).showToast();
   }
 
-  login(){
-    this.store.dispatch(login());
-  }
-  logout(){
-    this.store.dispatch(logout());
-  }
+  // login(){
+  //   this.store.dispatch(login());
+  // }
+  // logout(){
+  //   this.store.dispatch(logout());
+  // }
 
   navigateToHome(){
     this.route.navigate(['/']);

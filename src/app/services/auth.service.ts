@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, User, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, GoogleAuthProvider, User, signInWithEmailAndPassword, signInWithPopup } from '@angular/fire/auth';
 import { UserCredential, createUserWithEmailAndPassword } from '@firebase/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ResponseGeneric, UserAuth } from '../models/types';
@@ -45,13 +45,13 @@ export class AuthService {
     if (error) return {error, message};
     return createUserWithEmailAndPassword(this.authFirebase, email, password)
     .then(async (userCredential: UserCredential) => {
-      let userCreated: UserAuth = {
-        email: userCredential.user.email,
-        accessToken: await this.getToken(userCredential.user) 
-      }
       try {
         await this.userService.createUser(email, username);
-        this.userAuth.next(userCreated);
+        let accessToken = await this.getToken((userCredential.user))
+        this.setAuthUser({
+          email: userCredential.user.email, 
+          accessToken
+        })
         this.setUser(email);
         return {
           error: false,
@@ -73,11 +73,11 @@ export class AuthService {
   async signIn(email:string, password:string) : Promise<ResponseGeneric>{
     return signInWithEmailAndPassword(this.authFirebase, email, password)
     .then(async (userCredential: UserCredential) => {
-      let userLog: UserAuth = {
-        email: userCredential.user.email,
-        accessToken: await this.getToken(userCredential.user) 
-      }
-      this.userAuth.next(userLog);
+      let accessToken = await this.getToken((userCredential.user))
+      this.setAuthUser({
+        email: userCredential.user.email, 
+        accessToken
+      })
       this.setUser(email);
       return {
         error: false,
@@ -91,6 +91,44 @@ export class AuthService {
         message: ErrorFirebase[error.code as keyof typeof ErrorFirebase]
       }
     });
+  }
+
+
+  async signInWithGoogle() : Promise<ResponseGeneric>{
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(this.authFirebase, provider)
+    .then(async (userCredential: UserCredential) => {
+      let userExists = await this.userService.findUserByEmail(String(userCredential.user.email));
+      if(!userExists.user) {
+        try {
+          await this.userService.createUser(String(userCredential.user.email), String(userCredential.user.displayName));
+        } catch (error: any) {
+          return error;
+        }
+      }
+      let accessToken = await this.getToken((userCredential.user))
+      this.setAuthUser({
+        email: userCredential.user.email, 
+        accessToken
+      })
+      this.setUser(String(userCredential.user.email));
+      return {
+        error: false,
+        message: 'Login Successfully'
+      }
+    })
+    .catch((error: FirebaseError) => {
+      console.log('error signInWithGoogle', error);
+      return {
+        error: true,
+        message: ErrorFirebase[error.code as keyof typeof ErrorFirebase]
+      }
+    }); 
+
+  }
+
+  setAuthUser(user: UserAuth){
+    this.userAuth.next(user);
   }
 
   setUser(email: string){
