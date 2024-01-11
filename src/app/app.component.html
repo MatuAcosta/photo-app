@@ -1,5 +1,5 @@
 <app-header
-[logged]="authLogged$ | async"
+[logged]="(authService.userAuth$ | async) ? true : false"
 ></app-header>
 
 <main class="container mx-auto flex flex-col items-center h-screen">

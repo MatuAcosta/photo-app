@@ -5,6 +5,7 @@ import { logout } from '../../ngrx/auth/auth.actions';
 import Toastify from 'toastify-js';
 import { colorsToastify } from '../../utils/constants';
 import { NgClass } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,7 @@ import { NgClass } from '@angular/common';
 })
 export class HeaderComponent {
   @Input() logged: any;
-  private store: Store<any> = inject(Store<any>);
+  private authService: AuthService = inject(AuthService);
   public displayHeader: boolean = false;
   
   toggleHeader(){
@@ -29,7 +30,7 @@ export class HeaderComponent {
   }
   logout(){
     this.toastify('Logout success');
-    this.store.dispatch(logout());
+    this.authService.logout();
   }
   toastify(text: string, error?: boolean){
     return Toastify({

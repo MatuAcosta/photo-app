@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
    * @param picturesArray 
    * @returns {[key: username]: PictureDTO} object of pictures indexed by username
    */
-  indexPictures(picturesArray: PictureDTO[]){
+  indexPictures(picturesArray: PictureDTO[]) : {[key: string]: PictureDTO}{
     let pcituresIndexed = picturesArray.reduce((acc: any, picture: PictureDTO) => {
       acc[picture.username] = picture;
       return acc

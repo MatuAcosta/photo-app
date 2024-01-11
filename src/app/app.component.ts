@@ -2,11 +2,10 @@ import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import {  RouterLink, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
-import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { selectAuthLogged } from './ngrx/auth/auth.selector';
+import { Store } from '@ngrx/store';
 import { DateService } from './services/date.service';
 import { InstructionsModalComponent } from './instructions-modal/instructions-modal.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +16,9 @@ import { InstructionsModalComponent } from './instructions-modal/instructions-mo
 })
 export class AppComponent implements OnInit {
   title = 'photo-app';
-  private store: Store<any> = inject(Store<any>);
   private dateService: DateService = inject(DateService);
   private platformId: any = inject(PLATFORM_ID);
-  public authLogged$: Observable<boolean> = this.store.pipe(select(selectAuthLogged));
+  public authService: AuthService = inject(AuthService);
   public showModal: boolean = false;
   constructor(){
     if(this.platformId === 'browser' && localStorage.getItem('instructions') === null){
@@ -30,6 +28,7 @@ export class AppComponent implements OnInit {
     if(this.platformId === 'browser' && localStorage.getItem('instructions') === 'false'){
       this.showModal = true;
     }
+    this.authService.verifyAuth();
   }
 
   async ngOnInit(): Promise<any> {

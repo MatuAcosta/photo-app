@@ -18,6 +18,23 @@ export class AuthService {
   
   constructor() { }
 
+  verifyAuth(){    
+    const unsuscribe = 
+    this.authFirebase.onAuthStateChanged((user: User | null) => {
+      console.log('user', user);
+      if(user){
+        this.userAuth.next({
+          email: user.email,
+          accessToken: this.getToken(user)
+        })
+        this.setUser(String(user.email));
+      } else{
+        this.userAuth.next(null);
+      }
+      unsuscribe();
+    })
+  }
+
   async verifyUsername(username:string) {
     return await this.userService.findUserByUserName(username);
   }
@@ -83,6 +100,7 @@ export class AuthService {
   async logout(){
     this.userAuth.next(null);
     this.userService.cleanUserDTO();
+    return await this.authFirebase.signOut();
   }
 
 
