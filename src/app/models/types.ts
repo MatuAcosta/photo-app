@@ -23,8 +23,9 @@ export type PictureDTO = {
     createdAt: string;
     topic: string;
     likes: string[]; // array of users that liked the picture
-    time: number;
+    time?: number;
 }
+
 
 export type TopicDTO = {
     topic: string;

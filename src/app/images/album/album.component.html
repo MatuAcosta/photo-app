@@ -1,7 +1,8 @@
 <mat-card class="example-card rounded-full w-64 border-2 
 bg-gradient-to-b from-slate-100 from-20% to-gray-300 to-90%
 bg-black bg-opacity-10
-hover:border-emerald-300">
+hover:transition hover:duration-500 hover:ease-in-out hover:scale-105
+hover:border-emerald-300" (click)="show()" >
     <img 
       class="w-full h-full  shadow-md"
     mat-card-image [src]="imageSrc">
@@ -10,7 +11,7 @@ hover:border-emerald-300">
         {{username}}
       </mat-card-title>
       <button 
-        (click)="likePhoto()"
+        (click)="likePhoto($event)"
         class=" 
         flex text-white items-center text-center px-2 py-4 rounded-xl 
         bg-gradient-to-r from-emerald-950 from-20% to-slate-950 to-90% 

@@ -3,20 +3,20 @@ import { AlbumComponent } from '../images/album/album.component';
 import { PictureService } from '../services/picture.service';
 import { PictureDTO, UserDTO } from '../models/types';
 import { TopicService } from '../services/topic.service';
-import { DocumentData } from '@angular/fire/firestore';
 import { RouterLink } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { KeyValuePipe } from '@angular/common';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { Store, select } from '@ngrx/store';
 import { selectAuthLogged } from '../ngrx/auth/auth.selector';
 import { colorsToastify } from '../utils/constants';
 import Toastify from 'toastify-js';
+import { PicturedetailComponent } from '../images/picturedetail/picturedetail.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AlbumComponent, RouterLink, KeyValuePipe],
+  imports: [NgClass, PicturedetailComponent, AlbumComponent, RouterLink, KeyValuePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -29,7 +29,9 @@ export class HomeComponent implements OnInit {
   private platformId: any = inject(PLATFORM_ID);
   public pictures: {[key: string]: PictureDTO} = {};
   public topicService: TopicService = inject(TopicService);
-  
+  public showDetail: boolean = false;
+  public selectedPicture: any  = null;
+
   constructor() { 
   }
   async ngOnInit() {
@@ -88,6 +90,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  toggleDetail(pictureSelected?: PictureDTO){
+    this.selectedPicture = this.selectedPicture ? null : pictureSelected;
+    this.showDetail = !this.showDetail;
+  }
+
+
   async likePicture(event: any){
     let userDTO: UserDTO | null |any = null;
     let subLogged = this.userService.userDTO$.subscribe((user: UserDTO | null) => {
@@ -100,11 +108,15 @@ export class HomeComponent implements OnInit {
     let pictureLikes = this.pictures[event.username as keyof typeof this.pictures].likes;
     let indexLikes = this.indexLikesOfAPicture(pictureLikes);
     if(indexLikes[userDTO.username as keyof typeof indexLikes]){ 
+      
       this.pictures[event.username as keyof typeof this.pictures].likes = pictureLikes.filter((username: string) => username !== userDTO.username);
     } else {
       this.pictures[event.username as keyof typeof this.pictures].likes.push(userDTO.username);
     }
     pictureLikes = this.pictures[event.username as keyof typeof this.pictures].likes;
+    if(this.selectedPicture){
+      this.selectedPicture.likes = pictureLikes;
+    }
     try {
       await this.pictureService.likePicture(event.username , pictureLikes);
     } catch (error) {

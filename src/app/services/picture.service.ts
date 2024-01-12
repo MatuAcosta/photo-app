@@ -102,6 +102,8 @@ export class PictureService {
 
   async likePicture(username: string, likes: string[]) {
     try {    
+      console.log('hola llegue', username, likes);
+      
       const pictureRef = doc(this.firestore, this.dbPictures, username);
       await updateDoc(pictureRef, {
         likes
