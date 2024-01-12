@@ -1,7 +1,7 @@
-<app-header
+<div class="container-all">
+  <app-header
 [logged]="(authService.userAuth$ | async) ? true : false"
 ></app-header>
-
 <main class="container mx-auto flex flex-col items-center h-screen">
   @if(showModal){
    <app-instructions-modal
@@ -10,5 +10,6 @@
   }
   <router-outlet></router-outlet>  
 </main>
-<app-footer
-></app-footer>
+<app-footer ></app-footer>
+</div>
+

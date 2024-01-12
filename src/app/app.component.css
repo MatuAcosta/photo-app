@@ -1,0 +1,9 @@
+.container-all {
+    display: flex;
+    flex-direction: column;
+    min-height: 110%;
+  }
+  
+  main {
+    flex: 1 !important;
+  }
