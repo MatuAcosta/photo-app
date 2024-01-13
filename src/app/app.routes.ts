@@ -37,6 +37,5 @@ export const routes: Routes = [
         loadComponent() {
             return import('./images/upload/upload.component').then(m => m.UploadComponent);
         },
-        canActivate: [authGuard]
     }
 ];

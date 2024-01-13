@@ -1,5 +1,5 @@
-export const PASSWORD_REGEXP = /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{6,}$/
-export const USERNAME_REGEXP = /^[\w-_.]{5,16}$/;
+export const PASSWORD_REGEXP = /^[a-zA-Z0-9_.-]*$/
+export const USERNAME_REGEXP = /^[\w-_.]{3,16}$/;
 
 export const colorsToastify = {
     success: ['#64748B', '#059669'],

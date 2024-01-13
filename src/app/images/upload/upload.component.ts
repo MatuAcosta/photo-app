@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
 import {Component, OnDestroy, OnInit, inject,NgZone } from '@angular/core';
 import { PictureService } from '../../services/picture.service';
-import { Subject, Subscription, firstValueFrom, takeUntil } from 'rxjs';
+import { Subject, Subscription,takeUntil } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { Router, RouterModule } from '@angular/router';
 import Toastify from 'toastify-js';
-import { colorsToastify } from '../../utils/constants';
+import { USERNAME_REGEXP, colorsToastify } from '../../utils/constants';
+import { TopicService } from '../../services/topic.service';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-upload',
   standalone: true,
-  imports: [CommonModule, RouterModule ],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule ],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
 })
@@ -21,12 +23,18 @@ export class UploadComponent implements OnInit, OnDestroy{
   private destroy$ = new Subject<void>();
   private router: Router = inject(Router);
   private ngZone: NgZone = inject(NgZone);
+  public topicService:TopicService = inject(TopicService);
   public uploadSub: Subscription | undefined;
   public imageUploaded: File | undefined;
   public imageSrc: string | undefined;
   public progress: number = 0;
+  public userDTO = this.userService.userDTO;
+  public userName: FormControl | undefined;
 
   ngOnInit(): void {
+    if(!this.userDTO){
+      this.setFormUsername();
+    }
     this.pictureService.uploadProgress$
     .pipe(takeUntil(this.destroy$))
     .subscribe(async (progress: number) => { 
@@ -36,12 +44,37 @@ export class UploadComponent implements OnInit, OnDestroy{
     .pipe(takeUntil(this.destroy$))
     .subscribe( async (url: string) => {
       if(url !== '' && this.progress === 100){
-        let user = await firstValueFrom(this.userService.userDTO$);
-        await this.uploadImageToStore(url, String(user?.username), '');
+        let user = this.userDTO ? this.userDTO.username : this.userName?.value;
+        await this.uploadImageToStore(url, String(user), '');
         this.navigate('home', 1000);
       }
     })
+
+
   }
+
+  setFormUsername(){
+    this.userName = new FormControl('', [Validators.required, Validators.pattern(USERNAME_REGEXP)]); 
+  }
+
+  async getUserByUsername(){
+    try {
+    let userRes = await this.userService.findUserByUserName(this.userName?.value);
+    return userRes;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getPictureByUsername(){
+    try {
+    let userRes = await this.pictureService.findPictureByUsername(this.userName?.value);
+    return userRes;
+    } catch (error) {
+      return error;
+    }
+  }
+
 
   onDrop(event: any){
     event.preventDefault();
@@ -66,11 +99,19 @@ export class UploadComponent implements OnInit, OnDestroy{
   
   async uploadImageToStorage(){
     if(!this.imageUploaded) return;
+    if(this.userName?.invalid) return this.toastify('Username is invalid', true);
+    if(!this.userDTO){
+      let userRes: any = await this.getUserByUsername();
+      let pictureRes: any = await this.getPictureByUsername();
+      if( userRes.error || pictureRes.error) return this.toastify(userRes.message, true);
+      if( userRes.user || pictureRes.picture) return this.toastify('Username already used', true);
+    }
     try {
-      let user = await firstValueFrom(this.userService.userDTO$);
+      let user = this.userDTO ? this.userDTO.username : this.userName?.value;
       let path = `images/${user?.username}/${this.imageUploaded?.name}`;
       this.pictureService.uploadPictureToStorage(this.imageUploaded, path);
     } catch (error) {
+      //console.log('ERRORRR',error);
       return this.toastify('Error uploading image', true)
     }
   }

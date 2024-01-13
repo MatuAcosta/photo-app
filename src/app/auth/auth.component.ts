@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { login, logout } from '../ngrx/auth/auth.actions';
 import Toastify from 'toastify-js';
-import { PASSWORD_REGEXP, colorsToastify } from '../utils/constants';
+import { PASSWORD_REGEXP, USERNAME_REGEXP, colorsToastify } from '../utils/constants';
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -47,7 +47,7 @@ export class AuthComponent implements OnInit {
   } 
   
   addUserNameFormControl(){
-    return this.signForm.addControl('username', new FormControl<string>('', [Validators.required,Validators.minLength(3)]));
+    return this.signForm.addControl('username', new FormControl<string>('', [Validators.required,Validators.pattern(USERNAME_REGEXP), Validators.minLength(3)]));
   }
 
 

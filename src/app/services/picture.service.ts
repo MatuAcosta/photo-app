@@ -1,11 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs,  orderBy, query, setDoc,  updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs,  orderBy, query, setDoc,  updateDoc } from '@angular/fire/firestore';
 import { FirebaseStorage, Storage, StorageError, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
 import { DateService } from './date.service';
 import { TopicService } from './topic.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +33,7 @@ export class PictureService {
       //console.log('Upload is ' + this.uploadProgress.getValue() + '% done');
     },
     (error: StorageError) => {
-      //console.log('error in uploadPicture', error);
+      console.log('error in uploadPicture', error);
       return {
         error: true,
         message: 'error uploading picture'
@@ -79,6 +78,31 @@ export class PictureService {
 
   setUrl(url: string){
     this.urlPicture.next(url);
+  }
+
+  async findPictureByUsername(username: string){
+    const docRef = doc(this.firestore, this.dbPictures, username);    
+    try {
+      const docSnap = await getDoc(docRef); 
+      if(docSnap.exists()){
+        return {
+          error: false,
+          message: 'Picture already exists',
+          picture: docSnap.data()
+        }
+      }
+      return {
+        error: false,
+        message: 'Picture Not Exists',
+        picture: null
+      }
+    } catch (err: any) {
+      //console.log('error', err)
+      return {
+        error: true,
+        message: err.message
+      }
+    }
   }
 
   async getPictures (): Promise<any>{

@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   private userService: UserService = inject(UserService);
   private platformId: any = inject(PLATFORM_ID);
   public pictures: {[key: string]: PictureDTO} = {};
+  public picturesToShow: PictureDTO[] = [];
   public topicService: TopicService = inject(TopicService);
   public showDetail: boolean = false;
   public selectedPicture: any  = null;
@@ -36,7 +37,8 @@ export class HomeComponent implements OnInit {
   }
   async ngOnInit() {
     this.pictureService.pictures$.pipe(takeUntil(this.destroy$)).subscribe((pictures: PictureDTO[]) => {
-      this.pictures = this.indexPictures(pictures)
+      this.pictures = this.indexPictures(pictures);
+      this.picturesToShow = Object.values(this.pictures); //object indexed sorts key alphabetically
     });
     if(!this.topicService.topicOfTheDay){
       await this.getTopicOfTheDay();
@@ -75,9 +77,10 @@ export class HomeComponent implements OnInit {
    */
   indexPictures(picturesArray: PictureDTO[]) : {[key: string]: PictureDTO}{
     let pcituresIndexed = picturesArray.reduce((acc: any, picture: PictureDTO) => {
+      console.log('picture', picture);
       acc[picture.username] = picture;
       return acc
-    }, {});
+    }, {});    
     return pcituresIndexed;
   }
 

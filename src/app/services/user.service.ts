@@ -8,20 +8,24 @@ import { UserDTO } from '../models/types';
 export class UserService {
   private firestore: Firestore = inject(Firestore);
   private users_path: string = 'users';
-  private userDTO: BehaviorSubject<UserDTO | null > = new BehaviorSubject<UserDTO | null > (null);
-  public userDTO$: Observable<UserDTO | null> = this.userDTO.asObservable() ;
+  private _userDTO: BehaviorSubject<UserDTO | null > = new BehaviorSubject<UserDTO | null > (null);
+  public userDTO$: Observable<UserDTO | null> = this._userDTO.asObservable() ;
 
   constructor() { }
   
+  get userDTO(){
+    return this._userDTO.getValue();
+  }
+
 
   cleanUserDTO(){
-    this.userDTO.next(null);  
+    this._userDTO.next(null);  
   }
 
   setUserDTO(email: string){
     this.findUserByEmail(email).then((res: any) => {
       if(res.error) return;
-      if(res.user) this.userDTO.next(res.user);
+      if(res.user) this._userDTO.next(res.user);
     })
   }
 

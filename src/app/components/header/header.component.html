@@ -1,9 +1,16 @@
-<nav class="flex items-center 
-justify-between flex-wrap bg-gradient-to-r from-emerald-900 from-20% to-slate-900 to-90% to-90% p-4 lg:h-20">
-  <div class="flex items-center flex-shrink-0 text-emerald mr-6">
+<nav class="flex items-start justify-between flex-wrap bg-gradient-to-r from-emerald-900 from-20% to-slate-900 to-90% to-90% p-4 lg:h-24">
+  <div class="md:flex md:items-start flex-shrink-0 text-emerald mr-6">
     <a routerLink="">
-      <h1 class="font-sans italic bg-gradient-to-r from-emerald-100 from-10% to-slate-300 to-90% bg-clip-text text-transparent text-6xl font-bold">PicTopic</h1>
+      <img class="w-16 h-16" src="./assets/pag.png" alt="">
     </a>
+    <button 
+      class= "md:ml-10 w-24 md:w-64 hover:bg-emerald-900 border-2 hover:border-emerald-400
+      bg-gradient-to-r from-slate-900 from-20% to-slate-950 to-90% lg:mr-3  mt-3 rounded-xl px-6 py-1 flex items-center justify-center">
+        <a routerLink="/upload" class="
+        block text-center text-sm lg:inline-block lg:mt-0 text-white">
+        Upload your pic!
+      </a>
+    </button>
   </div>
   <div class="block lg:hidden">
     <button 
@@ -15,7 +22,6 @@ justify-between flex-wrap bg-gradient-to-r from-emerald-900 from-20% to-slate-90
   <div [ngClass]="displayHeader ? 'visible' : 'hidden' " class="w-full block flex-grow lg:flex lg:items-center lg:w-80">
     <div class="text-md lg:flex lg:flex-grow justify-end">
       @if(!logged){
-        <p class="mt-3 mr-3 self-center text-slate-200">Want to upload your photo?</p>
         <button class="
         hover:bg-emerald-900 border-2 hover:border-emerald-400
         bg-gradient-to-r from-slate-900 from-20% to-slate-950 to-90%
@@ -34,14 +40,7 @@ justify-between flex-wrap bg-gradient-to-r from-emerald-900 from-20% to-slate-90
       </button>
       }
       @else {
-        <button 
-        class="w-32 hover:bg-emerald-900 border-2 hover:border-emerald-400
-        bg-gradient-to-r from-slate-900 from-20% to-slate-950 to-90% lg:mr-3  mt-3 rounded-xl px-6 py-1 flex items-center justify-center">
-          <a routerLink="/upload" class="
-          block text-center lg:inline-block lg:mt-0 text-white">
-          Upload
-        </a>
-      </button>
+
         <button 
         (click)="logout()"
         class="w-32 hover:bg-emerald-900 border-2 hover:border-emerald-400

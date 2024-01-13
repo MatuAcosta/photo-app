@@ -23,15 +23,15 @@
         </span>
     </section>
     <section  [ngClass]="showDetail ? 'blur-xl' : null" class="grid grid-cols-1 ml-5 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        @for (pic of pictures | keyvalue; track pic.value.username){
+        @for (pic of picturesToShow; track pic.username){
             <album 
                 class="animate-fade"
-                [username]="pic.value.username"
-                [imageSrc]="pic.value.url"
-                [description]="pic.value.description"
-                [createdAt]="pic.value.createdAt"
-                [likes]="pic.value.likes"
-                [topic]="pic.value.topic"
+                [username]="pic.username"
+                [imageSrc]="pic.url"
+                [description]="pic.description"
+                [createdAt]="pic.createdAt"
+                [likes]="pic.likes"
+                [topic]="pic.topic"
                 (likePicture)="likePicture($event)"
                 (showDetail)="toggleDetail($event)"
             >
