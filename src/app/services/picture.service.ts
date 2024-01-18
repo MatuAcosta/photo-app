@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PictureDTO } from '../models/types';
 import { DateService } from './date.service';
 import { TopicService } from './topic.service';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class PictureService {
   private urlPicture: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private dbPictures: string = 'pictures';  
   private pictures: BehaviorSubject<PictureDTO[]> = new BehaviorSubject<PictureDTO[]>([]);
+  private loadingService: LoadingService = inject(LoadingService);
   public pictures$ = this.pictures.asObservable();
   public urlPicture$ = this.urlPicture.asObservable();
   public uploadProgress$ = this.uploadProgress.asObservable();
@@ -43,6 +45,8 @@ export class PictureService {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL: string) => { 
         //console.log('File available at', downloadURL);
         this.urlPicture.next(downloadURL);
+        this.uploadProgress.next(0);  
+
         return {
           error: false,
           message: '',
@@ -108,6 +112,7 @@ export class PictureService {
   async getPictures (): Promise<any>{
     try {
       const queryPictures =  query(collection(this.firestore, this.dbPictures), orderBy('time', 'desc')); 
+      this.loadingService.setisLoading(true);
       const pictures: any = await getDocs(queryPictures);
       let picturesArray: PictureDTO[] = [];
       pictures.forEach((picture: any) => {        
@@ -122,12 +127,13 @@ export class PictureService {
         data: error
       }
     }
+    finally{
+      this.loadingService.setisLoading(false);
+    }
   }
 
   async likePicture(username: string, likes: string[]) {
-    try {    
-      console.log('hola llegue', username, likes);
-      
+    try {          
       const pictureRef = doc(this.firestore, this.dbPictures, username);
       await updateDoc(pictureRef, {
         likes

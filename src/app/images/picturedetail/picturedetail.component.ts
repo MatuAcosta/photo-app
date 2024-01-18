@@ -20,7 +20,7 @@ export class PicturedetailComponent {
   }
 
   likePhoto(){
-    console.log(this.picture?.username);
+    //console.log(this.picture?.username);
     this.likePicture.emit({
       username: this.picture?.username,
       likes: this.picture?.likes

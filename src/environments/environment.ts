@@ -7,4 +7,5 @@ export const environment = {
     "messagingSenderId": import.meta.env['NG_APP_messagingSenderId'], 
     "measurementId": import.meta.env['NG_APP_measurementId'],
     'openAIKEY': import.meta.env['NG_APP_openAiKEY'],
+    'encryptKey': import.meta.env['NG_APP_encryptKey'],
 };

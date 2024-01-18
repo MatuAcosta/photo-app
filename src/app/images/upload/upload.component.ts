@@ -8,6 +8,7 @@ import Toastify from 'toastify-js';
 import { USERNAME_REGEXP, colorsToastify } from '../../utils/constants';
 import { TopicService } from '../../services/topic.service';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-upload',
@@ -23,6 +24,7 @@ export class UploadComponent implements OnInit, OnDestroy{
   private destroy$ = new Subject<void>();
   private router: Router = inject(Router);
   private ngZone: NgZone = inject(NgZone);
+  private loadingService: any = inject(LoadingService);
   public topicService:TopicService = inject(TopicService);
   public uploadSub: Subscription | undefined;
   public imageUploaded: File | undefined;
@@ -43,6 +45,8 @@ export class UploadComponent implements OnInit, OnDestroy{
     this.pictureService.urlPicture$
     .pipe(takeUntil(this.destroy$))
     .subscribe( async (url: string) => {
+      if(this.progress > 1 && !this.loadingService.isLoading) this.loadingService.setisLoading(true);
+      
       if(url !== '' && this.progress === 100){
         let user = this.userDTO ? this.userDTO.username : this.userName?.value;
         await this.uploadImageToStore(url, String(user), '');
@@ -127,7 +131,9 @@ export class UploadComponent implements OnInit, OnDestroy{
     } catch (error) {
       //console.log('error uploadImageToStore', error);
       return this.toastify('Error uploading image', true)
-    } 
+    } finally {
+      this.loadingService.setisLoading(false);
+    }
   }
 
   

@@ -7,11 +7,12 @@ import { InstructionsModalComponent } from './instructions-modal/instructions-mo
 import { AuthService } from './services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ FooterComponent, InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
+  imports: [ AsyncPipe,FooterComponent, InstructionsModalComponent,CommonModule, RouterOutlet, RouterLink, HeaderComponent, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,8 +21,8 @@ export class AppComponent implements OnInit {
   title = 'photo-app';
   private dateService: DateService = inject(DateService);
   private platformId: any = inject(PLATFORM_ID);
-  private http: HttpClient = inject(HttpClient);  
-public authService: AuthService = inject(AuthService);
+  public loadingService: LoadingService = inject(LoadingService);
+  public authService: AuthService = inject(AuthService);
   public showModal: boolean = false;
   constructor(){
     if(this.platformId === 'browser' && localStorage.getItem('instructions') === null){

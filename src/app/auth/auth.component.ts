@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import { login, logout } from '../ngrx/auth/auth.actions';
 import Toastify from 'toastify-js';
 import { PASSWORD_REGEXP, USERNAME_REGEXP, colorsToastify } from '../utils/constants';
+import { LoadingService } from '../services/loading.service';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -15,11 +18,11 @@ import { PASSWORD_REGEXP, USERNAME_REGEXP, colorsToastify } from '../utils/const
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css'
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, HttpInterceptor {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
   private route = inject(Router);
-  private store = inject(Store<any>);
+  private loadingService: LoadingService = inject(LoadingService);  
   public isSignUp:boolean = false;
 
   public h2Text: string | undefined;
@@ -34,6 +37,11 @@ export class AuthComponent implements OnInit {
     this.buttonText = this.isSignUp ? 'Sign up' : 'Sign in';
   }
 
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): any {
+      console.log('req,', req)
+      return;
+  }
 
   public signForm: any = this.fb.group({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
@@ -61,6 +69,7 @@ export class AuthComponent implements OnInit {
     if(!this.signForm.valid) return this.toastify('Email or password incorrect', true);
     const {email, password} = this.signForm.value;
     try {
+      this.loadingService.setisLoading(true);
       let signIn = await this.authService.signIn(String(email), String(password));
       if(signIn.error) throw new Error(signIn.message);
       //console.log(signIn.message);
@@ -69,6 +78,8 @@ export class AuthComponent implements OnInit {
     } catch (error: any) {
       this.toastify(error.message, true);
 
+    } finally {
+      this.loadingService.setisLoading(false);
     }
 
   }
@@ -80,6 +91,7 @@ export class AuthComponent implements OnInit {
     
     const {email, password, username} = this.signForm.value;
     try {
+      this.loadingService.setisLoading(true);
       let signUp = await this.authService.signUp(String(email), String(password), String(username));
       if(signUp.error) throw new Error(signUp.message);
       //console.log(signUp.message);
@@ -87,11 +99,14 @@ export class AuthComponent implements OnInit {
       this.toastify(signUp.message);
     } catch (error: any) {
       this.toastify(error.message, true);
+    } finally {
+      this.loadingService.setisLoading(false);
     }
   }
 
   async signInWithGoogle(){
     try {
+      this.loadingService.setisLoading(true);
       let signGoogle = await this.authService.signInWithGoogle();
       if(signGoogle.error) throw new Error(signGoogle.message);
       //console.log(signGoogle.message);
@@ -99,6 +114,10 @@ export class AuthComponent implements OnInit {
       this.toastify(signGoogle.message);
     } catch (error) {
       
+    }
+    finally {
+      this.loadingService.setisLoading(false);
+
     }
   }
 

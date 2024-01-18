@@ -6,6 +6,9 @@ import { ResponseGeneric, UserAuth } from '../models/types';
 import { UserService } from './user.service';
 import { FirebaseError } from '@angular/fire/app';
 import { ErrorFirebase } from '../utils/error';
+import { LoadingService } from './loading.service';
+import  CryptoJS from 'crypto-js';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
   
@@ -14,6 +17,7 @@ export class AuthService {
   private authFirebase: Auth = inject(Auth);
   private userAuth: BehaviorSubject<UserAuth | null > = new BehaviorSubject<UserAuth | null > (null);
   private userService: UserService = inject(UserService);
+  private loadingService: any = inject(LoadingService);
   public userAuth$: Observable<UserAuth | null> = this.userAuth.asObservable() ;
   
   constructor() { }
@@ -39,10 +43,16 @@ export class AuthService {
     return await this.userService.findUserByUserName(username);
   }
 
+  encryptPassword(password: string){
+    let newPass = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(password), environment.encryptKey).toString()
+    return newPass;
+  }
+
   async signUp(email: string, password: string, username:string){
     let { error , message, user} = await this.verifyUsername(username);
     if(user) return {error: true, message};
     if (error) return {error, message};
+    //password = this.encryptPassword(password)
     return createUserWithEmailAndPassword(this.authFirebase, email, password)
     .then(async (userCredential: UserCredential) => {
       try {
@@ -71,6 +81,7 @@ export class AuthService {
   }
 
   async signIn(email:string, password:string) : Promise<ResponseGeneric>{
+    //password = this.encryptPassword(password)
     return signInWithEmailAndPassword(this.authFirebase, email, password)
     .then(async (userCredential: UserCredential) => {
       let accessToken = await this.getToken((userCredential.user))
@@ -85,7 +96,7 @@ export class AuthService {
       }
     })
     .catch((error: FirebaseError) => {
-      //console.log('error login', error);
+    console.log('error login', error);
       return { 
         error: true,
         message: ErrorFirebase[error.code as keyof typeof ErrorFirebase]
@@ -138,7 +149,10 @@ export class AuthService {
   async logout(){
     this.userAuth.next(null);
     this.userService.cleanUserDTO();
-    return await this.authFirebase.signOut();
+    this.loadingService.setisLoading(true);
+    await this.authFirebase.signOut();
+    this.loadingService.setisLoading(false);
+    return;
   }
 
 

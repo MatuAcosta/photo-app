@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
    */
   indexPictures(picturesArray: PictureDTO[]) : {[key: string]: PictureDTO}{
     let pcituresIndexed = picturesArray.reduce((acc: any, picture: PictureDTO) => {
-      console.log('picture', picture);
+      //console.log('picture', picture);
       acc[picture.username] = picture;
       return acc
     }, {});    
@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
     try {
       await this.pictureService.likePicture(event.username , pictureLikes);
     } catch (error) {
-      console.log('error likePicture', error);
+      //console.log('error likePicture', error);
     } finally {
       subLogged.unsubscribe();
     }
